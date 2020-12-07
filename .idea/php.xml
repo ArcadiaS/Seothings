@@ -141,6 +141,8 @@
       <path value="$PROJECT_DIR$/vendor/phenx/php-font-lib" />
       <path value="$PROJECT_DIR$/vendor/santigarcor/laratrust" />
       <path value="$PROJECT_DIR$/vendor/kkszymanowski/traitor" />
+      <path value="$PROJECT_DIR$/vendor/laravel/socialite" />
+      <path value="$PROJECT_DIR$/vendor/league/oauth1-client" />
     </include_path>
   </component>
   <component name="PhpUnit">
