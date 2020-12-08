@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
 
 class VerificationController extends Controller
@@ -14,33 +16,43 @@ class VerificationController extends Controller
         $this->middleware('throttle:6,1')->only('verify', 'resend');
     }
 
-
-    public function verify(Request $request) {
-
-        if ($request->route('id') != $request->user()->getKey()){
-
+    public function verify(Request $request)
+    {
+        if (!$request->user()){
+            throw new AuthorizationException;
         }
 
-        if (!$request->hasValidSignature()) {
-            return response()->json(["msg" => "Invalid/Expired url provided."], 401);
+        if (! hash_equals((string)$request->route('id'), (string)$request->user()->getKey())) {
+            throw new AuthorizationException;
         }
 
-        $user = User::findOrFail($user_id);
-
-        if (!$user->hasVerifiedEmail()) {
-            $user->markEmailAsVerified();
+        if (! hash_equals((string)$request->route('hash'), sha1($request->user()->getEmailForVerification()))) {
+            throw new AuthorizationException;
         }
 
-        return redirect()->to('/');
+        if (! $request->hasValidSignature()) {
+            return response()->json(["message" => "Invalid/Expired url provided."], 401);
+        }
+
+        if ($request->user()->markEmailAsVerified()) {
+            return response()->json(["message" => "Email already verified. Please login again."], 400);
+        }
+
+        if (! $request->user()->hasVerifiedEmail()) {
+            event(new Verified($request->user()));
+        }
+
+        return response()->json(["message" => "Email verified."], 200);
     }
 
-    public function resend() {
-        if (auth()->user()->hasVerifiedEmail()) {
-            return response()->json(["msg" => "Email already verified."], 400);
+    public function resend(Request $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return response()->json(["message" => "Email already verified."], 400);
         }
 
-        auth()->user()->sendEmailVerificationNotification();
+        $request->user()->sendEmailVerificationNotification();
 
-        return response()->json(["msg" => "Email verification link sent on your email id"]);
+        return response()->json(["message" => "Email verification link sent on your email."]);
     }
 }

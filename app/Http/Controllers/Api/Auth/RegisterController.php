@@ -16,8 +16,11 @@ class RegisterController extends Controller
 
         event(new Registered($user));
 
-        return response()->setStatusCode(201)->json([
-            'message' => `We sent a code to {$request->email} to verify your email.`
-        ]);
+        $accessToken = $user->createToken('before_verify_token')->accessToken;
+
+        return response()->json([
+            'access_token' => $accessToken,
+            'message' => 'We sent a code to verify your email.'
+        ], 201);
     }
 }
