@@ -11,9 +11,23 @@ use BenSampo\Enum\Enum;
  */
 final class UserType extends Enum
 {
-    const Analyst =   0;
-    const Consultant =   1;
-    const MarketingManager = 2;
-    const WebDeveloper = 3;
-    const Other = 4;
+    const ANALYST =   0;
+    const CONSULTANT =   1;
+    const MARKETING = 2;
+    const DEVELOPER = 3;
+    const OTHER = 4;
+
+    public static function getDescription($value): string
+    {
+        if ($value === self::MARKETING) {
+            return 'Marketing Manager';
+        }
+
+        if ($value === self::DEVELOPER) {
+            return 'Web Developer';
+        }
+
+        return parent::getDescription($value);
+    }
+
 }

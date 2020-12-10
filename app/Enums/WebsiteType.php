@@ -11,10 +11,10 @@ use BenSampo\Enum\Enum;
  */
 final class WebsiteType extends Enum
 {
-    const ECommerce =   0;
-    const Education = 1;
-    const Marketplace = 2;
-    const Personal = 3;
-    const Saas =   4;
-    const Other = 5;
+    const ECOMMERCE =   0;
+    const EDUCATION = 1;
+    const MARKETPLACE = 2;
+    const PERSONAL = 3;
+    const SAAS =   4;
+    const OTHER = 5;
 }
