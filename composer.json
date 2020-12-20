@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.4|^8.0",
         "bensampo/laravel-enum": "^3.1",
+        "beyondcode/laravel-websockets": "^1.9",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -18,7 +19,10 @@
         "laravel/passport": "^10.0",
         "laravel/socialite": "^5.1",
         "laravel/tinker": "^2.5",
-        "santigarcor/laratrust": "^6.3"
+        "pusher/pusher-php-server": "^4.1",
+        "react/dns": "^1.4",
+        "santigarcor/laratrust": "^6.3",
+        "vinkla/hashids": "^9.1"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.8",

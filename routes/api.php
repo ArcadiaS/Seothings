@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\VerificationController;
+use App\Http\Controllers\WebsiteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +14,6 @@ Route::group(['prefix' => 'auth'], function (){
     Route::get('me', [AuthController::class, 'authenticatedUser']);
 });
 
-Route::group([], function (){
-
+Route::group(['middleware' => ['auth:api']], function (){
+    Route::apiResource('sites', WebsiteController::class);
 });

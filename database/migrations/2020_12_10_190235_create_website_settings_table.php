@@ -22,8 +22,8 @@ class CreateWebsiteSettingsTable extends Migration
             $table->boolean('suppress_passwords')->default(true);
             $table->boolean('suppress_keystrokes')->default(true);
             $table->json('ip_blocks')->nullable();
+            $table->boolean('notify_via_email')->default(false);
             $table->string('notify_email')->nullable();
-            $table->boolean('notify_email')->default(false);
             $table->enum('notify_interval_type', NotifyIntervalType::getValues());
             $table->timestamps();
         });
