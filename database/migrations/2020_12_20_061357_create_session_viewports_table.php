@@ -14,10 +14,9 @@ class CreateSessionViewportsTable extends Migration
     public function up()
     {
         Schema::create('session_viewports', function (Blueprint $table) {
-            $table->id();
-            $table->uuid('uuid')->index()->default(\Illuminate\Support\Str::uuid()->toString());
-            $table->unsignedBigInteger('session_id');
-            $table->foreign('session_id')->references('id')->on('sessions')->onDelete('cascade')->onUpdate('cascade');
+            $table->uuid('id')->primary()->index();
+            $table->uuid('guest_session_id')->index();
+            $table->foreign('guest_session_id')->references('id')->on('guest_sessions')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

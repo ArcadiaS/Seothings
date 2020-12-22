@@ -14,12 +14,11 @@ class CreateGuestsTable extends Migration
     public function up()
     {
         Schema::create('guests', function (Blueprint $table) {
-            $table->id();
-            $table->uuid('uuid')->unique()->default(\Illuminate\Support\Str::uuid()->toString())->index();
+            $table->uuid('id')->primary()->index();
             $table->ipAddress('ip_address');
-            $table->string('user_agent', 255);
             $table->unsignedBigInteger('website_id')->index();
             $table->foreign('website_id')->references('id')->on('websites')->onDelete('cascade')->onUpdate('cascade');
+            $table->unique(['id', 'website_id', 'ip_address']);
             $table->timestamps();
         });
     }

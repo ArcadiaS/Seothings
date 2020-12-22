@@ -14,17 +14,10 @@ class CreateGuestSessionsTable extends Migration
     public function up()
     {
         Schema::create('guest_sessions', function (Blueprint $table) {
-            $table->id();
-            $table->uuid('uuid')->index()->default(\Illuminate\Support\Str::uuid()->toString());
-            $table->unsignedBigInteger('guest_id');
+            $table->uuid('id')->index()->primary();
+            $table->text('user_agent')->nullable();
+            $table->uuid('guest_id');
             $table->foreign('guest_id')->references('id')->on('guests')->onDelete('cascade')->onUpdate('cascade');
-            $table->ipAddress('ip_address');
-            $table->string('country')->nullable();
-            $table->string('ip')->nullable();
-            $table->string('device_type')->nullable();
-            $table->string('browser_type')->nullable();
-            $table->string('operating_system_type')->nullable();
-            $table->string('user_agent', 500);
             $table->timestamps();
         });
     }

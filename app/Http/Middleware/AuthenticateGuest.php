@@ -2,7 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\GuestService;
 use Closure;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
 class AuthenticateGuest
@@ -33,18 +36,17 @@ class AuthenticateGuest
                 $request->ip()
             );
 
-            $guest->id = "GUEST-{$guest->id}";
-
             if (!empty($guest)) {
-                $guest->load('site');
+                $guest->load('website');
 
                 $host = parse_url($request->headers->get('origin'))['host'];
 
-                if (Str::contains($host, $guest->site->domain)) {
+                if (Str::contains($guest->website->url, $host)) {
                     \Auth::login($guest);
                 }
             }
         }
+
         return $next($request);
     }
 }

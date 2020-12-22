@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class SessionViewportRecording extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_info',
+        'session_data',
+        'session_viewport_id',
+    ];
 }

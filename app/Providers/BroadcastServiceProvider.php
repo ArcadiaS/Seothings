@@ -19,8 +19,8 @@ class BroadcastServiceProvider extends ServiceProvider
         Broadcast::routes([
             'prefix' => 'api',
             'middleware' => [
-               HandleCors::class,
-                'bindings',
+                HandleCors::class,
+                \Illuminate\Routing\Middleware\SubstituteBindings::class,
                 AuthenticateGuest::class,
             ]
         ]);

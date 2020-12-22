@@ -17,6 +17,8 @@ class CreateSessionViewportRecordingsTable extends Migration
             $table->id();
             $table->json('user_info');  // guest uuid - viewport_id  site_id
             $table->json('session_data');
+            $table->uuid('session_viewport_id');
+            $table->foreign('session_viewport_id')->references('id')->on('session_viewports')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

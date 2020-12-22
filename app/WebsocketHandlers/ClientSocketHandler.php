@@ -26,32 +26,43 @@ use BeyondCode\LaravelWebSockets\WebSockets\Channels\ChannelManager;
 
 class ClientSocketHandler extends WebSocketHandler
 {
-    public function __construct(ChannelManager $channelManager)
+    /**
+     * @var \App\Services\GuestService
+     */
+    private $guestService;
+
+    /**
+     * ClientSocketHandler constructor.
+     *
+     * @param  \BeyondCode\LaravelWebSockets\WebSockets\Channels\ChannelManager  $channelManager
+     * @param  \App\Services\GuestService  $guestService
+     */
+    public function __construct(ChannelManager $channelManager, GuestService $guestService)
     {
         $this->channelManager = $channelManager;
         parent::__construct($channelManager);
+        $this->guestService = $guestService;
     }
 
     public function onOpen(ConnectionInterface $connection)
     {
         parent::onOpen($connection);
         $requestURL = $connection->httpRequest->getUri();
-        $host = $requestURL->getHost();
-        $scheme = $requestURL->getScheme();
-        $urlPath = $requestURL->getPath();
         $ipAddress = $connection->remoteAddress;
         $userAgent = $connection->httpRequest->getHeader('User-Agent')[0];
         $acceptLanguage = $connection->httpRequest->getHeader('Accept-Language')[0];
         $host = $connection->httpRequest->getHeader('Host')[0]; // sunucu yani bizim host
-        $apiKey = QueryParameters::create($connection->httpRequest)->get('apiKey');
+        $site_id = QueryParameters::create($connection->httpRequest)->get('site_id');
+        $cookies = $connection->httpRequest->getHeader('Cookie')[0];
 
-       // $session = $this->guestService->getSession($apiKey, $ipAddress, $userAgent);
+        $session = $this->guestService->getSession($site_id, $ipAddress, $userAgent);
 
         $connection->send(json_encode([
             'event' => 'auth',
             'data' => [
-
-                "expires" => \Carbon\Carbon::now()->add('1', 'hour'),
+                "guest" => $session->guest,
+                "session" => $session->id,
+                "expires" => \Carbon\Carbon::now()->addHours(1),
             ],
         ]));
     }
@@ -62,7 +73,7 @@ class ClientSocketHandler extends WebSocketHandler
 
         $messagePayload = json_decode($message->getPayload());
 
-        switch (str_replace('client-', '', $messagePayload->event)) {
+        switch (str_replace('client-xxxx', '', $messagePayload->event)) {
             case 'initialize':
                 dispatch(new CacheWebRecorderAssets($messagePayload->data));
                 dispatch(new RecordDomChanges($this->getId($messagePayload), $messagePayload->data));
@@ -104,7 +115,7 @@ class ClientSocketHandler extends WebSocketHandler
                 dispatch(new RecordFocusChange($this->getId($messagePayload), $messagePayload->data));
                 break;
             default:
-                dump($messagePayload->event);
+                dump("dumping".$messagePayload->event);
         }
     }
 

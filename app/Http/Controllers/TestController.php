@@ -9,19 +9,12 @@ class TestController extends Controller
 {
     public function testget()
     {
-        \Log::info('asdas');
+        return true;
     }
     public function test(Request $request)
     {
-        dd($request);
-        \Log::info($request->ajax_data);
 
         return "asd";
-        SessionRecord::create([
-            'name' => 'test',
-            'sessions' => json_encode($request->sessions)
-        ]);
 
-        return "ok";
     }
 }
