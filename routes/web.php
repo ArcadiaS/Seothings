@@ -7,5 +7,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('test', [\App\Http\Controllers\TestController::class, 'test']);
-Route::get('test', [\App\Http\Controllers\TestController::class, 'testget']);
+Route::post('test', function (\Illuminate\Http\Request $request) {
+    $payload = json_decode(json_encode($request->test));
+
+    $validator = \Illuminate\Support\Facades\Validator::make((array)$payload, [
+        'url' => 'url',
+        "nameing" => 'sometimes|integer'
+    ]);
+    dd($validator->fails());
+
+    dd("asdasd");
+});
