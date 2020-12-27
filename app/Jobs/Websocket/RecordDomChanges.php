@@ -96,7 +96,8 @@ class RecordDomChanges implements ShouldQueue
             'addedOrMoved.*.tc' => 'nullable|string',
             'addedOrMoved.*.cn' => 'nullable|object',
             'addedOrMoved.*.c' => 'nullable|boolean',
-            'timing' => 'required|date'
+            'timing' => 'required|date',
+            'page' => 'required|uuid'
         ];
     }
 }

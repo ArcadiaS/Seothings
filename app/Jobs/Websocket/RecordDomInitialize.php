@@ -70,7 +70,8 @@ class RecordDomInitialize implements ShouldQueue
             'text.*.c' => 'nullable|boolean',
             'rootId' => 'required|integer',
             'timing' => 'required|date',
-            'viewport' => 'required|uuid'
+            'viewport' => 'required|uuid',
+            'page' => 'required|uuid'
         ];
     }
 }

@@ -16,6 +16,6 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::get('me', [AuthController::class, 'authenticatedUser']);
+    Route::post('me', [AuthController::class, 'authenticatedUser']);
     Route::apiResource('sites', WebsiteController::class);
 });

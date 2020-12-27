@@ -24,8 +24,13 @@ class RolesAndPermissionsSeeder extends Seeder
             foreach ($data['permissions'] as $permission) {
                 Permission::firstOrCreate(['name' => $permission]);
 
-                $role->attachPermission($permission);
+                if (! $role->hasPermission($permission)) {
+                    $role->attachPermission($permission);
+                }
             }
         }
+
+        Role::firstOrCreate(['name' => 'Recording']);
+        Role::firstOrCreate(['name' => 'Heatmap']);
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laratrust\Traits\LaratrustUserTrait;
 use Laravel\Cashier\Billable;
 use Laravel\Passport\HasApiTokens;
 
@@ -52,7 +53,7 @@ use Laravel\Passport\HasApiTokens;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, HasApiTokens, Billable;
+    use HasFactory, Notifiable, LaratrustUserTrait, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -103,5 +104,11 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Team::class)
             ->withTimestamps();
+    }
+
+    public function isOnlyAdminInTeam(Team $team)
+    {
+        return $this->hasRole('team_admin', $team->id) &&
+            $team->users()->whereRoleIs('team_admin', $team->id)->count() === 1;
     }
 }
