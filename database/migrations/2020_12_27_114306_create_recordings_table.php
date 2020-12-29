@@ -16,12 +16,11 @@ class CreateRecordingsTable extends Migration
     {
         Schema::create('recordings', function (Blueprint $table) {
             $table->id()->index();
-            $table->json('user_info')->nullable();  // guest uuid - viewport_id  site_id
-            $table->unsignedTinyInteger('recording_type', RecordingType::getValues());
+            $table->enum('recording_type', RecordingType::getValues());
             $table->json('session_data');
             $table->uuid('viewport_page_id')->index();
             $table->foreign('viewport_page_id')->references('id')->on('viewport_pages')->onDelete('cascade')->onUpdate('cascade');
-            $table->timestamps();
+            $table->unsignedInteger('timing');
         });
     }
 

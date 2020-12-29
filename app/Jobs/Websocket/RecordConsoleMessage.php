@@ -2,18 +2,23 @@
 
 namespace App\Jobs\Websocket;
 
+use App\Enums\RecordingType;
+use App\Models\GuestSession;
+use App\Rules\TimestampRule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Validation\Rule;
 
 class RecordConsoleMessage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $data;
+
     private $sessionId;
 
     /**
@@ -35,6 +40,42 @@ class RecordConsoleMessage implements ShouldQueue
      */
     public function handle()
     {
-        Cache::tags([$this->sessionId, 'console_messages'])->put(hrtime(true), $this->data);
+        $data = json_encode($this->data);
+        $validator = Validator::make((array)$this->data, $this->rules());
+        if ($validator->fails()) {
+            foreach ($validator->getMessageBag()->getMessages() as $message) {
+                \Log::info($message);
+            }
+        } else {
+            $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
+
+            /** @var $viewport \App\Models\SessionViewport */
+            $viewport = $session->viewports()->firstOrCreate([
+                'id' => $this->data->viewport,
+            ]);
+
+            /** @var $page \App\Models\ViewportPage */
+            $page = $viewport->viewport_pages()
+                ->latest()
+                ->limit(1)
+                ->first();
+
+            $page->recordings()->create([
+                'recording_type' => RecordingType::CONSOLE,
+                'session_data' => json_decode($data),
+                'timing' => $this->data->timing,
+            ]);
+        }
+    }
+
+    public function rules()
+    {
+        return [
+            'type' => ['required', 'string', Rule::in(['log', 'warn', 'debug', 'info', 'error'])],
+            'stack' => 'required|string',
+            'viewport' => 'required|uuid',
+            'messages' => 'string',
+            'timing' => ['required', new TimestampRule],
+        ];
     }
 }

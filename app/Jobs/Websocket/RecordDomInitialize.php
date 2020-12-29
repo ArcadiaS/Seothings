@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 
 class RecordDomInitialize implements ShouldQueue
@@ -30,7 +31,6 @@ class RecordDomInitialize implements ShouldQueue
      */
     public function __construct($sessionId, $data)
     {
-        //
         $this->sessionId = $sessionId;
         $this->data = $data;
     }
@@ -42,13 +42,13 @@ class RecordDomInitialize implements ShouldQueue
      */
     public function handle()
     {
+        $data = json_encode($this->data);
         $validator = Validator::make((array)$this->data, $this->rules());
         if ($validator->fails()) {
             foreach ($validator->getMessageBag()->getMessages() as $message) {
                 \Log::info($message);
             }
         } else {
-
             $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
             // todo: check website domain is match ? or direct sql to db for optimize
             // \Log::warning(json_encode($this->get_domaininfo($this->data->baseHref)));
@@ -69,7 +69,8 @@ class RecordDomInitialize implements ShouldQueue
 
             $page->recordings()->create([
                 'recording_type' => RecordingType::INITIALIZE,
-                'session_data' => $this->data,
+                'session_data' => json_decode($data),
+                'timing' => $this->data->timing,
             ]);
         }
     }
@@ -88,7 +89,7 @@ class RecordDomInitialize implements ShouldQueue
             'children.*.pi' => 'nullable|string',
             'children.*.si' => 'nullable|string',
             'children.*.tc' => 'nullable|string',
-            'children.*.cn' => 'nullable|object',
+            'children.*.cn' => 'required|object',
             'children.*.c' => 'nullable|boolean',
             'rootId' => 'required|integer',
             'timing' => ['required', new TimestampRule],

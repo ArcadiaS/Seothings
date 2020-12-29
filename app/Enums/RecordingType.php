@@ -2,6 +2,7 @@
 
 namespace App\Enums;
 
+use BenSampo\Enum\Contracts\LocalizedEnum;
 use BenSampo\Enum\Enum;
 
 /**
@@ -9,17 +10,17 @@ use BenSampo\Enum\Enum;
  * @method static static OptionTwo()
  * @method static static OptionThree()
  */
-final class RecordingType extends Enum
+final class RecordingType extends Enum implements LocalizedEnum
 {
     const INITIALIZE =   0;
     const CHANGES =   1;
     const CLICK =   2;
     const SCROLL =   3;
     const WINDOWSIZE =   4;
-    const MOUSEMOVEMENT =   5;
+    const MOVEMENT =   5;
     const TABVISIBILITY =   6;
-    const NETWORKREQUEST =   7;
-    const CONSOLEMESSAGE =   8;
+    const NETWORK =   7;
+    const CONSOLE =   8;
     const SESSIONDETAILS =   9;
-    const FOCUSACTIVITY =   10;
+    const FOCUS =   10;
 }

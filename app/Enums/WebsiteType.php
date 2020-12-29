@@ -2,6 +2,7 @@
 
 namespace App\Enums;
 
+use BenSampo\Enum\Contracts\LocalizedEnum;
 use BenSampo\Enum\Enum;
 
 /**
@@ -9,7 +10,7 @@ use BenSampo\Enum\Enum;
  * @method static static OptionTwo()
  * @method static static OptionThree()
  */
-final class WebsiteType extends Enum
+final class WebsiteType extends Enum implements LocalizedEnum
 {
     const ECOMMERCE =   0;
     const EDUCATION = 1;

@@ -79,42 +79,42 @@ class ClientSocketHandler extends WebSocketHandler
                 dispatch(new CacheWebRecorderAssets($messagePayload->data));
                 dispatch(new RecordDomInitialize($this->getId($messagePayload), $messagePayload->data));
                 break;
-            //case 'changes':
-            //    dispatch(new RecordDomChanges($this->getId($messagePayload), $messagePayload->data));
-            //    break;
-            //case 'click':
-            //    dispatch(new RecordClick($this->getId($messagePayload), $messagePayload->data));
-            //    break;
-            //case 'scroll':
-            //    dispatch(new RecordScroll($this->getId($messagePayload), $messagePayload->data));
-            //    break;
-            //case 'window-size':
-            //    dispatch(new RecordWindowSize($this->getId($messagePayload), $messagePayload->data));
-            //    break;
-            //case 'mouse-movement':
-            //    dispatch(new RecordMouseMovement($this->getId($messagePayload), $messagePayload->data));
-            //    break;
-            //case 'tab-visibility':
-            //    dispatch(new RecordTabVisibilityChange($this->getId($messagePayload), $messagePayload->data));
-            //    break;
-            //case 'network-request':
-            //    dispatch(new RecordNetworkRequest($this->getId($messagePayload), $messagePayload->data));
-            //    break;
-            //case 'console-message':
-            //    dispatch(new RecordConsoleMessage($this->getId($messagePayload), $messagePayload->data));
-            //    break;
-            //case 'session-details':
-            //    dispatch(new RecordSessionDetails($this->getId($messagePayload), $messagePayload->data));
-            //    break;
-            //case 'chat-message':
-            //    dispatch(new RecordChatMessage($this->getId($messagePayload), $messagePayload->data));
-            //    break;
-            //case 'mark-chat-message-as-read':
-            //    dispatch(new MarkChatMessageAsRead($this->getId($messagePayload), $messagePayload->data));
-            //    break;
-            //case 'focus-activity':
-            //    dispatch(new RecordFocusChange($this->getId($messagePayload), $messagePayload->data));
-            //    break;
+            case 'changes':
+                dispatch(new RecordDomChanges($this->getId($messagePayload), $messagePayload->data));
+                break;
+            case 'click':
+                dispatch(new RecordClick($this->getId($messagePayload), $messagePayload->data));
+                break;
+            case 'scroll':
+                dispatch(new RecordScroll($this->getId($messagePayload), $messagePayload->data));
+                break;
+            case 'window-size':
+                dispatch(new RecordWindowSize($this->getId($messagePayload), $messagePayload->data));
+                break;
+            case 'mouse-movement':
+                dispatch(new RecordMouseMovement($this->getId($messagePayload), $messagePayload->data));
+                break;
+            case 'tab-visibility':
+                dispatch(new RecordTabVisibilityChange($this->getId($messagePayload), $messagePayload->data));
+                break;
+            case 'network-request':
+                dispatch(new RecordNetworkRequest($this->getId($messagePayload), $messagePayload->data));
+                break;
+            case 'console-message':
+                dispatch(new RecordConsoleMessage($this->getId($messagePayload), $messagePayload->data));
+                break;
+            case 'session-details':
+                dispatch(new RecordSessionDetails($this->getId($messagePayload), $messagePayload->data));
+                break;
+            case 'chat-message':
+                dispatch(new RecordChatMessage($this->getId($messagePayload), $messagePayload->data));
+                break;
+            case 'mark-chat-message-as-read':
+                dispatch(new MarkChatMessageAsRead($this->getId($messagePayload), $messagePayload->data));
+                break;
+            case 'focus-activity':
+                dispatch(new RecordFocusChange($this->getId($messagePayload), $messagePayload->data));
+                break;
             default:
                 dump("dumping".$messagePayload->event);
         }

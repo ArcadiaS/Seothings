@@ -21,7 +21,7 @@ class RecordChatMessage implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param $sessionId
+     * @param $userId
      * @param $data
      */
     public function __construct($userId, $data)
@@ -37,16 +37,16 @@ class RecordChatMessage implements ShouldQueue
      */
     public function handle()
     {
-        $guestChat = GuestChat::firstOrCreate([
-            "resolved" => false,
-            "guest_id" => $this->userId,
-        ]);
-
-        $guestChat->messages()->create([
-            'message' => $this->data->message,
-            'created_at' => $this->data->createdAt,
-            'user_type' => $this->data->isAgent ? User::class : Guest::class,
-            'user_id' => $this->data->isAgent ? (new User())->decode($this->data->user->hash) : (new Guest())->decode($this->data->user->hash)
-       ]);
+       // $guestChat = GuestChat::firstOrCreate([
+       //     "resolved" => false,
+       //     "guest_id" => $this->userId,
+       // ]);
+       //
+       // $guestChat->messages()->create([
+       //     'message' => $this->data->message,
+       //     'created_at' => $this->data->createdAt,
+       //     'user_type' => $this->data->isAgent ? User::class : Guest::class,
+       //     'user_id' => $this->data->isAgent ? (new User())->decode($this->data->user->hash) : (new Guest())->decode($this->data->user->hash)
+       //]);
     }
 }

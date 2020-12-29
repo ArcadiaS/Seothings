@@ -2,6 +2,8 @@
 
 namespace App\Jobs\Websocket;
 
+use App\Enums\RecordingType;
+use App\Models\GuestSession;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Queue\SerializesModels;
@@ -35,6 +37,46 @@ class RecordNetworkRequest implements ShouldQueue
      */
     public function handle()
     {
-        Cache::tags([$this->sessionId, 'network_requests'])->put(hrtime(true), $this->data);
+        $data = json_encode($this->data);
+        $validator = Validator::make((array)$this->data, $this->rules());
+        if ($validator->fails()) {
+            foreach ($validator->getMessageBag()->getMessages() as $message) {
+                \Log::info($message);
+            }
+        } else {
+            $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
+
+            /** @var $viewport \App\Models\SessionViewport */
+            $viewport = $session->viewports()->firstOrCreate([
+                'id' => $this->data->viewport,
+            ]);
+
+            /** @var $page \App\Models\ViewportPage */
+            $page = $viewport->viewport_pages()
+                ->latest()
+                ->limit(1)
+                ->first();
+
+            $page->recordings()->create([
+                'recording_type' => RecordingType::NETWORK,
+                'session_data' => json_decode($data),
+                'timing' => 0,
+            ]);
+        }
+    }
+
+    public function rules()
+    {
+        return [
+          'url' => 'nullable',
+          'method' => 'nullable',
+          'headers' => 'nullable',
+          'timestamp' => 'nullable',
+          'endTime' => 'nullable',
+          'status' => 'nullable',
+          'statusText' => 'nullable',
+          'response' => 'nullable',
+          'responseHeaders' => 'nullable',
+        ];
     }
 }

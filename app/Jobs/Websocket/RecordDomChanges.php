@@ -2,6 +2,9 @@
 
 namespace App\Jobs\Websocket;
 
+use App\Enums\RecordingType;
+use App\Models\GuestSession;
+use App\Rules\TimestampRule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Queue\SerializesModels;
@@ -37,15 +40,34 @@ class RecordDomChanges implements ShouldQueue
      */
     public function handle()
     {
-        // todo: there must be security check about payload
-
+        $data = json_encode($this->data);
         $validator = Validator::make((array)$this->data, $this->rules());
-        if ($validator->fails()){
-            foreach ($validator->getMessageBag()->getMessages() as $message){
-                //Log::warning($message[0]);
+        if ($validator->fails()) {
+            foreach ($validator->getMessageBag()->getMessages() as $message) {
+                \Log::info($message);
             }
-        }else{
+        } else {
+            $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
 
+            /** @var $viewport \App\Models\SessionViewport */
+            $viewport = $session->viewports()->firstOrCreate([
+                'id' => $this->data->viewport,
+            ]);
+
+            /** @var $page \App\Models\ViewportPage */
+            $page = $viewport->viewport_pages()
+                ->latest()
+                ->where('id', $this->data->page)
+                ->limit(1)
+                ->firstOrCreate([
+                    'id' => $this->data->page,
+                ]);
+
+            $page->recordings()->create([
+                'recording_type' => RecordingType::CHANGES,
+                'session_data' => json_decode($data),
+                'timing' => $this->data->timing,
+            ]);
         }
     }
 
@@ -57,7 +79,7 @@ class RecordDomChanges implements ShouldQueue
             'text.*.nt' => 'nullable|integer',
             'text.*.n' => 'nullable|string',
             'text.*.tn' => 'nullable|string',
-            'text.*.a' => 'nullable|json',
+            'text.*.a' => 'nullable',
             'text.*.pi' => 'nullable|string',
             'text.*.si' => 'nullable|string',
             'text.*.tc' => 'nullable|string',
@@ -68,7 +90,7 @@ class RecordDomChanges implements ShouldQueue
             'removed.*.nt' => 'nullable|integer',
             'removed.*.n' => 'nullable|string',
             'removed.*.tn' => 'nullable|string',
-            'removed.*.a' => 'nullable|json',
+            'removed.*.a' => 'nullable',
             'removed.*.pi' => 'nullable|string',
             'removed.*.si' => 'nullable|string',
             'removed.*.tc' => 'nullable|string',
@@ -79,7 +101,7 @@ class RecordDomChanges implements ShouldQueue
             'attributes.*.nt' => 'nullable|integer',
             'attributes.*.n' => 'nullable|string',
             'attributes.*.tn' => 'nullable|string',
-            'attributes.*.a' => 'nullable|json',
+            'attributes.*.a' => 'nullable',
             'attributes.*.pi' => 'nullable|string',
             'attributes.*.si' => 'nullable|string',
             'attributes.*.tc' => 'nullable|string',
@@ -90,13 +112,13 @@ class RecordDomChanges implements ShouldQueue
             'addedOrMoved.*.nt' => 'nullable|integer',
             'addedOrMoved.*.n' => 'nullable|string',
             'addedOrMoved.*.tn' => 'nullable|string',
-            'addedOrMoved.*.a' => 'nullable|json',
+            'addedOrMoved.*.a' => 'nullable',
             'addedOrMoved.*.pi' => 'nullable|string',
             'addedOrMoved.*.si' => 'nullable|string',
             'addedOrMoved.*.tc' => 'nullable|string',
             'addedOrMoved.*.cn' => 'nullable|object',
             'addedOrMoved.*.c' => 'nullable|boolean',
-            'timing' => 'required|date',
+            'timing' => ['required', new TimestampRule],
             'page' => 'required|uuid'
         ];
     }

@@ -10,10 +10,13 @@ class Recording extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
-        'user_info',
+        'recording_type',
         'session_data',
         'viewport_page_id',
+        'timing',
     ];
 
     protected $casts = [

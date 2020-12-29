@@ -2,6 +2,9 @@
 
 namespace App\Jobs\Websocket;
 
+use App\Enums\RecordingType;
+use App\Models\GuestSession;
+use App\Rules\TimestampRule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Queue\SerializesModels;
@@ -14,6 +17,7 @@ class RecordWindowSize implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $data;
+
     private $sessionId;
 
     /**
@@ -35,6 +39,42 @@ class RecordWindowSize implements ShouldQueue
      */
     public function handle()
     {
-        Cache::tags([$this->sessionId, 'window_size_changes'])->put(hrtime(true), $this->data);
+        $data = json_encode($this->data);
+        $validator = Validator::make((array)$this->data, $this->rules());
+        if ($validator->fails()) {
+            foreach ($validator->getMessageBag()->getMessages() as $message) {
+                \Log::info($message);
+            }
+        } else {
+            $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
+
+            /** @var $viewport \App\Models\SessionViewport */
+            $viewport = $session->viewports()->firstOrCreate([
+                'id' => $this->data->viewport,
+            ]);
+
+            /** @var $page \App\Models\ViewportPage */
+            $page = $viewport->viewport_pages()
+                ->latest()
+                ->limit(1)
+                ->first();
+
+            $page->recordings()->create([
+                'recording_type' => RecordingType::SCROLL,
+                'session_data' => json_decode($data),
+                'timing' => $this->data->timing,
+            ]);
+        }
+    }
+
+    public function rules()
+    {
+        return [
+            'width' => 'required',
+            'height' => 'required',
+            'viewport' => 'required|uuid',
+            'timing' => ['required', new TimestampRule],
+
+        ];
     }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Jobs\Websocket;
 
+use App\Enums\RecordingType;
+use App\Models\GuestSession;
+use App\Rules\TimestampRule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Queue\SerializesModels;
@@ -35,6 +38,41 @@ class RecordMouseMovement implements ShouldQueue
      */
     public function handle()
     {
-        Cache::tags([$this->sessionId, 'mouse_movements'])->put(hrtime(true), $this->data);
+        $data = json_encode($this->data);
+        $validator = Validator::make((array)$this->data, $this->rules());
+        if ($validator->fails()) {
+            foreach ($validator->getMessageBag()->getMessages() as $message) {
+                \Log::info($message);
+            }
+        } else {
+            $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
+
+            /** @var $viewport \App\Models\SessionViewport */
+            $viewport = $session->viewports()->firstOrCreate([
+                'id' => $this->data->viewport,
+            ]);
+
+            /** @var $page \App\Models\ViewportPage */
+            $page = $viewport->viewport_pages()
+                ->latest()
+                ->limit(1)
+                ->first();
+
+            $page->recordings()->create([
+                'recording_type' => RecordingType::MOVEMENT,
+                'session_data' => json_decode($data),
+                'timing' => $this->data->timing,
+            ]);
+        }
+    }
+
+    public function rules()
+    {
+        return [
+          'x' => 'required',
+            'y' => 'required',
+            'viewport' => 'required|uuid',
+            'timing' => ['required', new TimestampRule],
+        ];
     }
 }
