@@ -28,4 +28,14 @@ class SessionViewport extends Model
      * @var bool
      */
     public $incrementing = false;
+
+    public function session()
+    {
+        return $this->belongsTo(GuestSession::class);
+    }
+
+    public function viewport_pages()
+    {
+        return $this->hasMany(ViewportPage::class);
+    }
 }

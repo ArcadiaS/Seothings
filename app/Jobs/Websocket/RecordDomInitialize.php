@@ -2,6 +2,10 @@
 
 namespace App\Jobs\Websocket;
 
+use App\Enums\RecordingType;
+use App\Models\Guest;
+use App\Models\GuestSession;
+use App\Rules\TimestampRule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -39,16 +43,34 @@ class RecordDomInitialize implements ShouldQueue
     public function handle()
     {
         $validator = Validator::make((array)$this->data, $this->rules());
-        if ($validator->fails()){
-            foreach ($validator->getMessageBag()->getMessages() as $message){
-                //Log::warning($message[0]);
+        if ($validator->fails()) {
+            foreach ($validator->getMessageBag()->getMessages() as $message) {
+                \Log::info($message);
             }
-        }else{
-            // todo: initialize data
-            // todo: check url
-            // todo: check uuid
-            // todo: store
+        } else {
 
+            $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
+            // todo: check website domain is match ? or direct sql to db for optimize
+            // \Log::warning(json_encode($this->get_domaininfo($this->data->baseHref)));
+
+            /** @var $viewport \App\Models\SessionViewport */
+            $viewport = $session->viewports()->firstOrCreate([
+                'id' => $this->data->viewport,
+            ]);
+
+            /** @var $page \App\Models\ViewportPage */
+            $page = $viewport->viewport_pages()
+                ->latest()
+                ->where('id', $this->data->page)
+                ->limit(1)
+                ->firstOrCreate([
+                    'id' => $this->data->page,
+                ]);
+
+            $page->recordings()->create([
+                'recording_type' => RecordingType::INITIALIZE,
+                'session_data' => $this->data,
+            ]);
         }
     }
 
@@ -57,21 +79,21 @@ class RecordDomInitialize implements ShouldQueue
         return [
             'baseHref' => 'required|url',
             'children' => 'required|array',
-            'children.*' => 'required|json',
-            'text.*.i' => 'required|integer',
-            'text.*.nt' => 'nullable|integer',
-            'text.*.n' => 'nullable|string',
-            'text.*.tn' => 'nullable|string',
-            'text.*.a' => 'nullable|json',
-            'text.*.pi' => 'nullable|string',
-            'text.*.si' => 'nullable|string',
-            'text.*.tc' => 'nullable|string',
-            'text.*.cn' => 'nullable|object',
-            'text.*.c' => 'nullable|boolean',
+            'children.*' => 'required',
+            'children.*.i' => 'required|integer',
+            'children.*.nt' => 'nullable|integer',
+            'children.*.n' => 'nullable|string',
+            'children.*.tn' => 'nullable|string',
+            'children.*.a' => 'nullable|json',
+            'children.*.pi' => 'nullable|string',
+            'children.*.si' => 'nullable|string',
+            'children.*.tc' => 'nullable|string',
+            'children.*.cn' => 'nullable|object',
+            'children.*.c' => 'nullable|boolean',
             'rootId' => 'required|integer',
-            'timing' => 'required|date',
+            'timing' => ['required', new TimestampRule],
             'viewport' => 'required|uuid',
-            'page' => 'required|uuid'
+            'page' => 'required|uuid',
         ];
     }
 }

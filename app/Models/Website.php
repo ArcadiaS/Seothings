@@ -22,8 +22,18 @@ class Website extends Model
         'type' => WebsiteType::class,
     ];
 
+    public function getTypeNameAttribute()
+    {
+        return WebsiteType::fromValue($this->type)->description;
+    }
+
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function guests()
+    {
+        return $this->hasMany(Guest::class);
     }
 }

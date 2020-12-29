@@ -13,7 +13,12 @@ class Company extends Model
         'name',
     ];
 
-    public function sites()
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
+    }
+
+    public function websites()
     {
         return $this->hasMany(Website::class);
     }

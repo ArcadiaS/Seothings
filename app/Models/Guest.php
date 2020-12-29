@@ -33,4 +33,9 @@ class Guest extends Authenticatable
     {
         return $this->belongsTo(Website::class);
     }
+
+    public function sessions()
+    {
+        return $this->hasMany(GuestSession::class);
+    }
 }

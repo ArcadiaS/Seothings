@@ -8,6 +8,7 @@ use App\Jobs\Websocket\RecordChatMessage;
 use App\Jobs\Websocket\RecordClick;
 use App\Jobs\Websocket\RecordConsoleMessage;
 use App\Jobs\Websocket\RecordDomChanges;
+use App\Jobs\Websocket\RecordDomInitialize;
 use App\Jobs\Websocket\RecordFocusChange;
 use App\Jobs\Websocket\RecordMouseMovement;
 use App\Jobs\Websocket\RecordNetworkRequest;
@@ -76,7 +77,7 @@ class ClientSocketHandler extends WebSocketHandler
         switch (str_replace('client-', '', $messagePayload->event)) {
             case 'initialize':
                 dispatch(new CacheWebRecorderAssets($messagePayload->data));
-                dispatch(new RecordDomChanges($this->getId($messagePayload), $messagePayload->data));
+                dispatch(new RecordDomInitialize($this->getId($messagePayload), $messagePayload->data));
                 break;
             //case 'changes':
             //    dispatch(new RecordDomChanges($this->getId($messagePayload), $messagePayload->data));

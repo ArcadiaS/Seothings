@@ -14,7 +14,7 @@ class CreateViewportPagesTable extends Migration
     public function up()
     {
         Schema::create('viewport_pages', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->index();
             $table->uuid('session_viewport_id')->index();
             $table->foreign('session_viewport_id')->references('id')->on('session_viewports')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

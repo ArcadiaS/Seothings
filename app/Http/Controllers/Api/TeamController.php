@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Website;
+use App\Http\Resources\Api\Teams\TeamResource;
 use Illuminate\Http\Request;
 
-class WebsiteController extends Controller
+class TeamController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,9 @@ class WebsiteController extends Controller
      */
     public function index(Request $request)
     {
-        return response()->json();
+        $teams = $request->user()->teams()->load('users')->get();
+
+        return TeamResource::collection($teams);
     }
 
     /**
@@ -26,7 +28,7 @@ class WebsiteController extends Controller
      */
     public function store(Request $request)
     {
-        //get_domaininfo($this->data->baseHref)
+        //
     }
 
     /**

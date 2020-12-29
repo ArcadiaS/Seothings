@@ -15,7 +15,16 @@ class CreateGuestSessionsTable extends Migration
     {
         Schema::create('guest_sessions', function (Blueprint $table) {
             $table->uuid('id')->index()->primary();
-            $table->text('user_agent')->nullable();
+            $table->mediumText('user_agent');
+            $table->string('device')->nullable();
+            $table->string('browser')->nullable();
+            $table->string('browser_version')->nullable();
+            $table->string('platform')->nullable();
+            $table->string('platform_version')->nullable();
+            $table->string('languages')->nullable();
+            $table->boolean('is_robot')->default(false);
+            $table->string('robot_name')->nullable();
+            $table->boolean('first_seen')->default(true);
             $table->uuid('guest_id');
             $table->foreign('guest_id')->references('id')->on('guests')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

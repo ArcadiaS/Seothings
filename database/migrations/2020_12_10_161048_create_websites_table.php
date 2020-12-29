@@ -18,7 +18,10 @@ class CreateWebsitesTable extends Migration
         Schema::create('websites', function (Blueprint $table) {
             $table->id()->startingValue(100000);
             $table->string('url', '255');
-            $table->string('secret_key')->unique()->default(hash_hmac('sha256', \Illuminate\Support\Str::random(30), env('APP_KEY')));
+            $table->enum('protocol', ['http', 'https'])->default('https');
+            $table->string('subdomain', '50')->nullable();
+            $table->string('domain', '155')->nullable();
+            $table->string('host', '50')->nullable();
             $table->enum('type', WebsiteType::getValues())->nullable();
             $table->unsignedBigInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies');

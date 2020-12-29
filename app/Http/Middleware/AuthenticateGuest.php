@@ -39,9 +39,9 @@ class AuthenticateGuest
             if (!empty($guest)) {
                 $guest->load('website');
 
-                $host = parse_url($request->headers->get('origin'))['host'];
+                $host = $request->getHttpHost();
 
-                if (Str::contains($guest->website->url, $host)) {
+                if (Str::contains(parse_url($guest->website->url, PHP_URL_HOST), $host)) {
                     \Auth::login($guest);
                 }
             }

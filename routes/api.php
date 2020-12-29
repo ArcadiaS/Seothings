@@ -1,8 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Auth\InitializeController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\VerificationController;
+use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\GuestController;
+use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\Api\WebsiteController;
 use Illuminate\Support\Facades\Route;
@@ -17,5 +21,12 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::post('me', [AuthController::class, 'authenticatedUser']);
+    Route::post('initialize', InitializeController::class);
+
+    Route::apiResource('companies', CompanyController::class);
+    Route::apiResource('teams', TeamController::class);
     Route::apiResource('sites', WebsiteController::class);
+    Route::apiResource('sites.guests', GuestController::class);
+
+
 });

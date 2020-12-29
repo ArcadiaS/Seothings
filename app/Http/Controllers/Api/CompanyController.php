@@ -3,19 +3,25 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Website;
+use App\Http\Resources\Api\Companies\CompanyResource;
+use App\Models\Company;
 use Illuminate\Http\Request;
 
-class WebsiteController extends Controller
+class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index(Request $request)
     {
-        return response()->json();
+        $teams = $request->user()->teams->pluck('id')->toArray();
+
+        $companies = Company::with('websites')->whereIn('team_id', $teams)->get();
+
+        return CompanyResource::collection($companies);
     }
 
     /**
@@ -26,7 +32,7 @@ class WebsiteController extends Controller
      */
     public function store(Request $request)
     {
-        //get_domaininfo($this->data->baseHref)
+        //
     }
 
     /**
