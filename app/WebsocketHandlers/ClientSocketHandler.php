@@ -103,18 +103,19 @@ class ClientSocketHandler extends WebSocketHandler
             case 'console-message':
                 dispatch(new RecordConsoleMessage($this->getId($messagePayload), $messagePayload->data));
                 break;
-            case 'session-details':
-                dispatch(new RecordSessionDetails($this->getId($messagePayload), $messagePayload->data));
-                break;
-            case 'chat-message':
-                dispatch(new RecordChatMessage($this->getId($messagePayload), $messagePayload->data));
-                break;
-            case 'mark-chat-message-as-read':
-                dispatch(new MarkChatMessageAsRead($this->getId($messagePayload), $messagePayload->data));
-                break;
             case 'focus-activity':
                 dispatch(new RecordFocusChange($this->getId($messagePayload), $messagePayload->data));
                 break;
+            //case 'session-details':
+            //    dispatch(new RecordSessionDetails($this->getId($messagePayload), $messagePayload->data));
+            //    break;
+            //case 'chat-message':
+            //    dispatch(new RecordChatMessage($this->getId($messagePayload), $messagePayload->data));
+            //    break;
+            //case 'mark-chat-message-as-read':
+            //    dispatch(new MarkChatMessageAsRead($this->getId($messagePayload), $messagePayload->data));
+            //    break;
+
             default:
                 dump("dumping".$messagePayload->event);
         }

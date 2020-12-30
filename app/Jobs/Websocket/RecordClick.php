@@ -6,11 +6,11 @@ use App\Enums\RecordingType;
 use App\Models\GuestSession;
 use App\Rules\TimestampRule;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Validator;
 
 class RecordClick implements ShouldQueue
 {
@@ -61,7 +61,6 @@ class RecordClick implements ShouldQueue
             $page->recordings()->create([
                 'recording_type' => RecordingType::CLICK,
                 'session_data' => json_decode($data),
-                'timing' => $this->data->timing,
             ]);
         }
     }

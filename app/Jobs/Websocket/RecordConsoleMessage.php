@@ -6,12 +6,12 @@ use App\Enums\RecordingType;
 use App\Models\GuestSession;
 use App\Rules\TimestampRule;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 class RecordConsoleMessage implements ShouldQueue
 {
@@ -63,7 +63,6 @@ class RecordConsoleMessage implements ShouldQueue
             $page->recordings()->create([
                 'recording_type' => RecordingType::CONSOLE,
                 'session_data' => json_decode($data),
-                'timing' => $this->data->timing,
             ]);
         }
     }
@@ -72,7 +71,7 @@ class RecordConsoleMessage implements ShouldQueue
     {
         return [
             'type' => ['required', 'string', Rule::in(['log', 'warn', 'debug', 'info', 'error'])],
-            'stack' => 'required|string',
+            'stack' => 'nullable',
             'viewport' => 'required|uuid',
             'messages' => 'string',
             'timing' => ['required', new TimestampRule],

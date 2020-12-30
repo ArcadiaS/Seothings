@@ -66,6 +66,34 @@ Shuffle moves: <input id="moveCount" type="number" value="1000">
 <script>
 
     setTimeout(function(){
+        function reqListener () {
+            console.log("test");
+        }
+        function reqListener2 () {
+            console.log("test");
+        }
+        function reqListener3 () {
+            console.log("test");
+        }
+
+        var oReq = new XMLHttpRequest();
+        oReq.addEventListener("load", reqListener);
+        oReq.open("GET", "https://jsonplaceholder.typicode.com/posts");
+        oReq.send();
+        var oReq = new XMLHttpRequest();
+        oReq.addEventListener("load", reqListener2);
+        oReq.open("GET", "https://jsonplaceholder.typicode.com/albums");
+        oReq.send();
+        var oReq = new XMLHttpRequest();
+        oReq.addEventListener("load", reqListener3);
+        oReq.open("GET", "https://jsonplaceholder.typicode.com/users");
+        oReq.send();
+
+    }, 3000);
+
+
+
+    setTimeout(function(){
         var tag = document.createElement("p");
         var text = document.createTextNode("Tutorix is the best e-learning platform");
         tag.appendChild(text);

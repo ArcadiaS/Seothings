@@ -65,8 +65,7 @@ class RecordDomChanges implements ShouldQueue
 
             $page->recordings()->create([
                 'recording_type' => RecordingType::CHANGES,
-                'session_data' => json_decode($data),
-                'timing' => $this->data->timing,
+                'session_data' => json_decode($data)
             ]);
         }
     }
@@ -75,7 +74,8 @@ class RecordDomChanges implements ShouldQueue
     {
         return [
             'text' => 'sometimes|nullable|array',
-            'text.*.i' => 'required|integer',
+            'text.*.i' => 'nullable|integer',
+            'text.*.id' => 'nullable|integer',
             'text.*.nt' => 'nullable|integer',
             'text.*.n' => 'nullable|string',
             'text.*.tn' => 'nullable|string',
@@ -86,7 +86,8 @@ class RecordDomChanges implements ShouldQueue
             'text.*.cn' => 'nullable|object',
             'text.*.c' => 'nullable|boolean',
             'removed' => 'sometimes|nullable|array',
-            'removed.*.i' => 'required|integer',
+            'removed.*.i' => 'nullable|integer',
+            'removed.*.id' => 'nullable|integer',
             'removed.*.nt' => 'nullable|integer',
             'removed.*.n' => 'nullable|string',
             'removed.*.tn' => 'nullable|string',
@@ -97,7 +98,8 @@ class RecordDomChanges implements ShouldQueue
             'removed.*.cn' => 'nullable|object',
             'removed.*.c' => 'nullable|boolean',
             'attributes' => 'sometimes|nullable|array',
-            'attributes.*.i' => 'required|integer',
+            'attributes.*.i' => 'nullable|integer',
+            'attributes.*.id' => 'nullable|integer',
             'attributes.*.nt' => 'nullable|integer',
             'attributes.*.n' => 'nullable|string',
             'attributes.*.tn' => 'nullable|string',
@@ -108,7 +110,8 @@ class RecordDomChanges implements ShouldQueue
             'attributes.*.cn' => 'nullable|object',
             'attributes.*.c' => 'nullable|boolean',
             'addedOrMoved' => 'sometimes|nullable|array',
-            'addedOrMoved.*.i' => 'required|integer',
+            'addedOrMoved.*.i' => 'nullable|integer',
+            'addedOrMoved.*.id' => 'nullable|integer',
             'addedOrMoved.*.nt' => 'nullable|integer',
             'addedOrMoved.*.n' => 'nullable|string',
             'addedOrMoved.*.tn' => 'nullable|string',

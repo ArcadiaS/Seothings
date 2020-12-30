@@ -2,12 +2,9 @@
 
 namespace App\Jobs\Websocket;
 
-use App\Models\User\User;
 use Illuminate\Bus\Queueable;
-use App\Models\Site\Guest\Guest;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use App\Models\Site\Guest\Chat\GuestChat;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 

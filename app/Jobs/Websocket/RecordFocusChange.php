@@ -6,17 +6,18 @@ use App\Enums\RecordingType;
 use App\Models\GuestSession;
 use App\Rules\TimestampRule;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Validator;
 
 class RecordFocusChange implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $data;
+
     private $sessionId;
 
     /**
@@ -61,7 +62,6 @@ class RecordFocusChange implements ShouldQueue
             $page->recordings()->create([
                 'recording_type' => RecordingType::FOCUS,
                 'session_data' => json_decode($data),
-                'timing' => $this->data->timing,
             ]);
         }
     }
@@ -69,7 +69,7 @@ class RecordFocusChange implements ShouldQueue
     public function rules()
     {
         return [
-          'tabHasFocus' => 'required',
+            'tabHasFocus' => 'required',
             'viewport' => 'required|uuid',
             'timing' => ['required', new TimestampRule],
         ];

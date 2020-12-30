@@ -6,17 +6,18 @@ use App\Enums\RecordingType;
 use App\Models\GuestSession;
 use App\Rules\TimestampRule;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Validator;
 
 class RecordMouseMovement implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $data;
+
     private $sessionId;
 
     /**
@@ -39,6 +40,7 @@ class RecordMouseMovement implements ShouldQueue
     public function handle()
     {
         $data = json_encode($this->data);
+        $viewport_id = $this->data[0]->viewport;
         $validator = Validator::make((array)$this->data, $this->rules());
         if ($validator->fails()) {
             foreach ($validator->getMessageBag()->getMessages() as $message) {
@@ -49,7 +51,7 @@ class RecordMouseMovement implements ShouldQueue
 
             /** @var $viewport \App\Models\SessionViewport */
             $viewport = $session->viewports()->firstOrCreate([
-                'id' => $this->data->viewport,
+                'id' => $viewport_id,
             ]);
 
             /** @var $page \App\Models\ViewportPage */
@@ -58,21 +60,22 @@ class RecordMouseMovement implements ShouldQueue
                 ->limit(1)
                 ->first();
 
-            $page->recordings()->create([
-                'recording_type' => RecordingType::MOVEMENT,
-                'session_data' => json_decode($data),
-                'timing' => $this->data->timing,
-            ]);
+            foreach (json_decode($data) as $movementData){
+                $page->recordings()->create([
+                    'recording_type' => RecordingType::MOVEMENT,
+                    'session_data' => $movementData
+                ]);
+            }
         }
     }
 
     public function rules()
     {
         return [
-          'x' => 'required',
-            'y' => 'required',
-            'viewport' => 'required|uuid',
-            'timing' => ['required', new TimestampRule],
+            '*.x' => 'required',
+            '*.y' => 'required',
+            '*.timing' => ['required', new TimestampRule],
+            '*.viewport' => 'required|uuid',
         ];
     }
 }

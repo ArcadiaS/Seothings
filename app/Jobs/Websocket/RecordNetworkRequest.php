@@ -5,11 +5,11 @@ namespace App\Jobs\Websocket;
 use App\Enums\RecordingType;
 use App\Models\GuestSession;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Validator;
 
 class RecordNetworkRequest implements ShouldQueue
 {
@@ -60,7 +60,6 @@ class RecordNetworkRequest implements ShouldQueue
             $page->recordings()->create([
                 'recording_type' => RecordingType::NETWORK,
                 'session_data' => json_decode($data),
-                'timing' => 0,
             ]);
         }
     }

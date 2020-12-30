@@ -6,17 +6,18 @@ use App\Enums\RecordingType;
 use App\Models\GuestSession;
 use App\Rules\TimestampRule;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Validator;
 
 class RecordScroll implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $data;
+
     private $sessionId;
 
     /**
@@ -39,6 +40,7 @@ class RecordScroll implements ShouldQueue
     public function handle()
     {
         $data = json_encode($this->data);
+        $viewport_id = $this->data[0]->viewport;
         $validator = Validator::make((array)$this->data, $this->rules());
         if ($validator->fails()) {
             foreach ($validator->getMessageBag()->getMessages() as $message) {
@@ -49,7 +51,7 @@ class RecordScroll implements ShouldQueue
 
             /** @var $viewport \App\Models\SessionViewport */
             $viewport = $session->viewports()->firstOrCreate([
-                'id' => $this->data->viewport,
+                'id' => $viewport_id,
             ]);
 
             /** @var $page \App\Models\ViewportPage */
@@ -58,22 +60,23 @@ class RecordScroll implements ShouldQueue
                 ->limit(1)
                 ->first();
 
-            $page->recordings()->create([
-                'recording_type' => RecordingType::SCROLL,
-                'session_data' => json_decode($data),
-                'timing' => $this->data->timing,
-            ]);
+            foreach (json_decode($data) as $scrollData){
+                $page->recordings()->create([
+                    'recording_type' => RecordingType::SCROLL,
+                    'session_data' => $scrollData
+                ]);
+            }
         }
     }
 
     public function rules()
     {
         return [
-          'target' => 'required|string',
-            'scrollPosition' => 'required',
-            'scrollXPosition' => 'required',
-            'viewport' => 'required|uuid',
-            'timing' => ['required', new TimestampRule],
+            '*.target' => 'required|string',
+            '*.scrollPosition' => 'required',
+            '*.scrollXPosition' => 'required',
+            '*.viewport' => 'required|uuid',
+            '*.timing' => ['required', new TimestampRule],
         ];
     }
 }

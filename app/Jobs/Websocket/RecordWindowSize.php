@@ -6,11 +6,11 @@ use App\Enums\RecordingType;
 use App\Models\GuestSession;
 use App\Rules\TimestampRule;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Validator;
 
 class RecordWindowSize implements ShouldQueue
 {
@@ -60,9 +60,8 @@ class RecordWindowSize implements ShouldQueue
                 ->first();
 
             $page->recordings()->create([
-                'recording_type' => RecordingType::SCROLL,
+                'recording_type' => RecordingType::WINDOWSIZE,
                 'session_data' => json_decode($data),
-                'timing' => $this->data->timing,
             ]);
         }
     }
