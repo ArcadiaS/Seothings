@@ -40,7 +40,6 @@ class RecordMouseMovement implements ShouldQueue
     public function handle()
     {
         $data = json_encode($this->data);
-        $viewport_id = $this->data[0]->viewport;
         $validator = Validator::make((array)$this->data, $this->rules());
         if ($validator->fails()) {
             foreach ($validator->getMessageBag()->getMessages() as $message) {
@@ -51,7 +50,7 @@ class RecordMouseMovement implements ShouldQueue
 
             /** @var $viewport \App\Models\SessionViewport */
             $viewport = $session->viewports()->firstOrCreate([
-                'id' => $viewport_id,
+                'id' => $this->data->viewport,
             ]);
 
             /** @var $page \App\Models\ViewportPage */
@@ -60,22 +59,21 @@ class RecordMouseMovement implements ShouldQueue
                 ->limit(1)
                 ->first();
 
-            foreach (json_decode($data) as $movementData){
-                $page->recordings()->create([
-                    'recording_type' => RecordingType::MOVEMENT,
-                    'session_data' => $movementData
-                ]);
-            }
+            $page->recordings()->create([
+                'recording_type' => RecordingType::MOVEMENT,
+                'session_data' => json_decode($data),
+                'timing' => json_decode($data)->timing
+            ]);
         }
     }
 
     public function rules()
     {
         return [
-            '*.x' => 'required',
-            '*.y' => 'required',
-            '*.timing' => ['required', new TimestampRule],
-            '*.viewport' => 'required|uuid',
+            'x' => 'required',
+            'y' => 'required',
+            'timing' => ['required', new TimestampRule],
+            'viewport' => 'required|uuid',
         ];
     }
 }

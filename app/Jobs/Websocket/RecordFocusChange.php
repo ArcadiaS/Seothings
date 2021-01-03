@@ -62,6 +62,7 @@ class RecordFocusChange implements ShouldQueue
             $page->recordings()->create([
                 'recording_type' => RecordingType::FOCUS,
                 'session_data' => json_decode($data),
+                'timing' => json_decode($data)->timing
             ]);
         }
     }

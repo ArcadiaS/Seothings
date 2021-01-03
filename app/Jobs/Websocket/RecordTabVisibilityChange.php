@@ -61,6 +61,7 @@ class RecordTabVisibilityChange implements ShouldQueue
             $page->recordings()->create([
                 'recording_type' => RecordingType::TABVISIBILITY,
                 'session_data' => json_decode($data),
+                'timing' => json_decode($data)->timing
             ]);
         }
     }

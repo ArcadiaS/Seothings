@@ -38,4 +38,9 @@ class SessionViewport extends Model
     {
         return $this->hasMany(ViewportPage::class);
     }
+
+    public function recordings()
+    {
+        return $this->hasManyThrough(Recording::class, ViewportPage::class);
+    }
 }

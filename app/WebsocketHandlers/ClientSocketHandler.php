@@ -3,8 +3,6 @@
 namespace App\WebSocketHandlers;
 
 use App\Jobs\Websocket\CacheWebRecorderAssets;
-use App\Jobs\Websocket\MarkChatMessageAsRead;
-use App\Jobs\Websocket\RecordChatMessage;
 use App\Jobs\Websocket\RecordClick;
 use App\Jobs\Websocket\RecordConsoleMessage;
 use App\Jobs\Websocket\RecordDomChanges;
@@ -13,13 +11,11 @@ use App\Jobs\Websocket\RecordFocusChange;
 use App\Jobs\Websocket\RecordMouseMovement;
 use App\Jobs\Websocket\RecordNetworkRequest;
 use App\Jobs\Websocket\RecordScroll;
-use App\Jobs\Websocket\RecordSessionDetails;
 use App\Jobs\Websocket\RecordTabVisibilityChange;
 use App\Jobs\Websocket\RecordWindowSize;
 use Illuminate\Support\Str;
 use App\Services\GuestService;
 use Ratchet\ConnectionInterface;
-use Vinkla\Hashids\Facades\Hashids;
 use Ratchet\RFC6455\Messaging\MessageInterface;
 use BeyondCode\LaravelWebSockets\QueryParameters;
 use BeyondCode\LaravelWebSockets\WebSockets\WebSocketHandler;

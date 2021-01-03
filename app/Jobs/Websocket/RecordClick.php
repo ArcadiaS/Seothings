@@ -61,6 +61,7 @@ class RecordClick implements ShouldQueue
             $page->recordings()->create([
                 'recording_type' => RecordingType::CLICK,
                 'session_data' => json_decode($data),
+                'timing' => json_decode($data)->timing
             ]);
         }
     }

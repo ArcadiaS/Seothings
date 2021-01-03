@@ -68,8 +68,9 @@ class RecordDomInitialize implements ShouldQueue
                 ]);
 
             $page->recordings()->create([
-                'recording_type' => RecordingType::INITIALIZE,
-                'session_data' => json_decode($data)
+                'recording_type' => 1,
+                'session_data' => json_decode($data),
+                'timing' => json_decode($data)->timing,
             ]);
         }
     }

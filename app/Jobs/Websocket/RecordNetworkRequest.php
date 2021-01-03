@@ -60,6 +60,7 @@ class RecordNetworkRequest implements ShouldQueue
             $page->recordings()->create([
                 'recording_type' => RecordingType::NETWORK,
                 'session_data' => json_decode($data),
+                'timing' => json_decode($data)->timing
             ]);
         }
     }

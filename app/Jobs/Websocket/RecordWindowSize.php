@@ -62,6 +62,7 @@ class RecordWindowSize implements ShouldQueue
             $page->recordings()->create([
                 'recording_type' => RecordingType::WINDOWSIZE,
                 'session_data' => json_decode($data),
+                'timing' => json_decode($data)->timing
             ]);
         }
     }

@@ -63,6 +63,7 @@ class RecordConsoleMessage implements ShouldQueue
             $page->recordings()->create([
                 'recording_type' => RecordingType::CONSOLE,
                 'session_data' => json_decode($data),
+                'timing' => json_decode($data)->timing
             ]);
         }
     }
