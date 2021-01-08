@@ -15,7 +15,7 @@ class WebsiteController extends Controller
      */
     public function index(Request $request)
     {
-        return response()->json();
+        return response()->json("asasd");
     }
 
     /**

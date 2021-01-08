@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
+Broadcast::channel('stream', function ($user, $session_id) {
+    // todo:  $user ->  websites -> guests -> sessions  has  $session_id => then TRUE CHECK IF ITS AVAILABLE
+    return true;
+});
+
 Broadcast::channel('stream.{session_id}', function ($user, $session_id) {
     // todo:  $user ->  websites -> guests -> sessions  has  $session_id => then TRUE CHECK IF ITS AVAILABLE
     return true;

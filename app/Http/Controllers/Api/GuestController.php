@@ -20,7 +20,7 @@ class GuestController extends Controller
      * @param  \App\Models\Website  $website
      * @return \Illuminate\Http\Response
      */
-    public function index(Website $website)
+    public function index(Website $website, GuestSession $guest_session)
     {
         $sessions = GuestSession::select('guest_sessions.*', 'session_viewports.id as viewport_id')
             ->rightJoinRelationship('viewports')

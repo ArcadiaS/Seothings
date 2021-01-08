@@ -40,6 +40,7 @@ class RecordScroll implements ShouldQueue
      */
     public function handle()
     {
+        $viewport_id = $this->data[0]->viewport;
         $data = json_encode($this->data);
         $validator = Validator::make((array)$this->data, $this->rules());
         if ($validator->fails()) {
@@ -51,7 +52,7 @@ class RecordScroll implements ShouldQueue
 
             /** @var $viewport \App\Models\SessionViewport */
             $viewport = $session->viewports()->firstOrCreate([
-                'id' => $this->data->viewport,
+                'id' => $viewport_id,
             ]);
 
             /** @var $page \App\Models\ViewportPage */
@@ -60,22 +61,24 @@ class RecordScroll implements ShouldQueue
                 ->limit(1)
                 ->first();
 
-            $page->recordings()->create([
-                'recording_type' => RecordingType::SCROLL,
-                'session_data' => json_decode($data),
-                'timing' => json_decode($data)->timing
-            ]);
+            foreach (json_decode($data) as $record){
+                $page->recordings()->create([
+                    'recording_type' => RecordingType::SCROLL,
+                    'session_data' => $record,
+                    'timing' => $record->timing
+                ]);
+            }
         }
     }
 
     public function rules()
     {
         return [
-            'target' => 'required|string',
-            'scrollPosition' => 'required',
-            'scrollXPosition' => 'required',
-            'viewport' => 'required|uuid',
-            'timing' => ['required', new TimestampRule],
+            '*.target' => 'required|string',
+            '*.scrollPosition' => 'required',
+            '*.scrollXPosition' => 'required',
+            '*.viewport' => 'required|uuid',
+            '*.timing' => ['required', new TimestampRule],
         ];
     }
 }
