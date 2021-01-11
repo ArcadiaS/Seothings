@@ -38,10 +38,10 @@ return [
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 'useTLS' => false,
-                'encrypted' => false,
-                'host' => 'workspace',
-                'port' => 6001,
-                'scheme' => 'http'
+                'encrypted' => true,
+                'host' => 'socket.seoptie.com',
+                'port' => 443,
+                'scheme' => 'https'
             ],
         ],
 
