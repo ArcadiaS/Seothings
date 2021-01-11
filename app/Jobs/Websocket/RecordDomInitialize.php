@@ -43,55 +43,51 @@ class RecordDomInitialize implements ShouldQueue
     public function handle()
     {
         $data = json_encode($this->data);
+        \Log::info("INITIALIZE". $data);
         $validator = Validator::make((array)$this->data, $this->rules());
-        if ($validator->fails()) {
-            foreach ($validator->getMessageBag()->getMessages() as $message) {
-                \Log::info($message);
-            }
-        } else {
-            $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
-            // todo: check website domain is match ? or direct sql to db for optimize
-            // \Log::warning(json_encode($this->get_domaininfo($this->data->baseHref)));
 
-            /** @var $viewport \App\Models\SessionViewport */
-            $viewport = $session->viewports()->firstOrCreate([
-                'id' => $this->data->viewport,
+        $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
+        // todo: check website domain is match ? or direct sql to db for optimize
+        // \Log::warning(json_encode($this->get_domaininfo($this->data->baseHref)));
+
+        /** @var $viewport \App\Models\SessionViewport */
+        $viewport = $session->viewports()->firstOrCreate([
+            'id' => $this->data->viewport,
+        ]);
+
+        /** @var $page \App\Models\ViewportPage */
+        $page = $viewport->viewport_pages()
+            ->latest()
+            ->where('id', $this->data->page)
+            ->limit(1)
+            ->firstOrCreate([
+                'id' => $this->data->page,
             ]);
 
-            /** @var $page \App\Models\ViewportPage */
-            $page = $viewport->viewport_pages()
-                ->latest()
-                ->where('id', $this->data->page)
-                ->limit(1)
-                ->firstOrCreate([
-                    'id' => $this->data->page,
-                ]);
-
-            $page->recordings()->create([
-                'recording_type' => 1,
-                'session_data' => json_decode($data),
-                'timing' => json_decode($data)->timing,
-            ]);
-        }
+        $page->recordings()->create([
+            'recording_type' => RecordingType::INITIALIZE,
+            'session_data' => json_decode($data),
+            'timing' => json_decode($data)->timing,
+        ]);
     }
 
     public function rules()
     {
         return [
-            'baseHref' => 'required|url',
-            'children' => 'required|array',
+            'baseHref' => 'required',
+            'children' => 'required',
             'children.*' => 'required',
-            'children.*.i' => 'required|integer',
-            'children.*.nt' => 'nullable|integer',
-            'children.*.n' => 'nullable|string',
-            'children.*.tn' => 'nullable|string',
-            'children.*.a' => 'nullable|json',
-            'children.*.pi' => 'nullable|string',
-            'children.*.si' => 'nullable|string',
-            'children.*.tc' => 'nullable|string',
-            'children.*.cn' => 'required|object',
-            'children.*.c' => 'nullable|boolean',
-            'rootId' => 'required|integer',
+            'children.*.i' => 'required',
+            'children.*.nt' => 'nullable',
+            'children.*.n' => 'nullable',
+            'children.*.tn' => 'nullable',
+            'children.*.a' => 'nullable',
+            'children.*.pi' => 'nullable',
+            'children.*.si' => 'nullable',
+            'children.*.tc' => 'nullable',
+            'children.*.cn' => 'required',
+            'children.*.c' => 'nullable',
+            'rootId' => 'required',
             'timing' => ['required', new TimestampRule],
             'viewport' => 'required|uuid',
             'page' => 'required|uuid',

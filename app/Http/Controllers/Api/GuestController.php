@@ -41,10 +41,9 @@ class GuestController extends Controller
         $session = $guestSession->load('viewports.viewport_pages.recordings');
         $recordings = $guestSession->recordings()->orderBy('session_data->timing')->get();
 
-        $domFirst = $recordings->where('recording_type', (string)RecordingType::CHANGES())->first();
+        $domFirst = $recordings->where('recording_type', (string)RecordingType::INITIALIZE())->first();
         $root = $domFirst->session_data;
         $domChanges = $recordings->where('recording_type', (string)RecordingType::CHANGES())
-            ->where('id', '!=', $domFirst->id)
             ->values()->groupBy('timing');
         $domChanges = $this->mergeData($domChanges)->toArray();
         //ksort($domChanges);
@@ -55,6 +54,8 @@ class GuestController extends Controller
         $consoleMessages = $this->getData($recordings, RecordingType::CONSOLE())->toArray();
         //ksort($consoleMessages);
         $windowSize = $recordings->where('recording_type', (string)RecordingType::WINDOWSIZE)->first()->session_data;
+        //$windowSize = $recordings->where('recording_type', 4)->first();
+        //if ($windowSize) $windowSize = $windowSize->session_data;
         $windowSizes = $this->getData($recordings, RecordingType::WINDOWSIZE())->toArray();
         //ksort($windowSizes);
         $scrollEvents = $this->getData($recordings, RecordingType::SCROLL())->toArray();

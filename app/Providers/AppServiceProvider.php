@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\AssetService;
+use App\Services\GuestService;
 use App\WebSocketHandlers\ClientSocketHandler;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use BeyondCode\LaravelWebSockets\Server\Logger\WebsocketsLogger;
@@ -18,12 +20,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(AssetService::class, AssetService::class);
+        $this->app->bind(GuestService::class, GuestService::class);
+
         if ($this->app->isLocal()) {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
         app()->singleton(WebsocketsLogger::class, function () {
             return (new WebsocketsLogger(new ConsoleOutput()))->enable(true);
         });
+
         Cashier::ignoreMigrations();
     }
 

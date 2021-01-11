@@ -42,33 +42,28 @@ class RecordDomChanges implements ShouldQueue
     {
         $data = json_encode($this->data);
         $validator = Validator::make((array)$this->data, $this->rules());
-        if ($validator->fails()) {
-            foreach ($validator->getMessageBag()->getMessages() as $message) {
-                \Log::info($message);
-            }
-        } else {
-            $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
 
-            /** @var $viewport \App\Models\SessionViewport */
-            $viewport = $session->viewports()->firstOrCreate([
-                'id' => $this->data->viewport,
+        $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
+
+        /** @var $viewport \App\Models\SessionViewport */
+        $viewport = $session->viewports()->firstOrCreate([
+            'id' => $this->data->viewport,
+        ]);
+
+        /** @var $page \App\Models\ViewportPage */
+        $page = $viewport->viewport_pages()
+            ->latest()
+            ->where('id', $this->data->page)
+            ->limit(1)
+            ->firstOrCreate([
+                'id' => $this->data->page,
             ]);
 
-            /** @var $page \App\Models\ViewportPage */
-            $page = $viewport->viewport_pages()
-                ->latest()
-                ->where('id', $this->data->page)
-                ->limit(1)
-                ->firstOrCreate([
-                    'id' => $this->data->page,
-                ]);
-
-            $page->recordings()->create([
-                'recording_type' => 1,
-                'session_data' => json_decode($data),
-                'timing' => json_decode($data)->timing
-            ]);
-        }
+        $page->recordings()->create([
+            'recording_type' => 1,
+            'session_data' => json_decode($data),
+            'timing' => json_decode($data)->timing
+        ]);
     }
 
     public function rules()

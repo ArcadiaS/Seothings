@@ -3,12 +3,25 @@
 
 <head>
     <title>Shuffle Comparison</title>
-    <script src="bundle.js"></script>
-    <script>
-        replayjs('auth', {
-            site_id: 100000
-        })
-    </script>
+{{--    <script src="bundle.js"></script>--}}
+{{--    <script>--}}
+{{--        replayjs('auth', {--}}
+{{--            site_id: 100000--}}
+{{--        })--}}
+{{--    </script>--}}
+{{--    <script src="rrweb.js"></script>--}}
+{{--<script>--}}
+
+{{--    const stopFn = new rrweb.record({--}}
+{{--        emit(event) {--}}
+{{--        // you should use console.log in this way to avoid errors.--}}
+{{--        const defaultLog = console.log["__rrweb_original__"]?console.log["__rrweb_original__"]:console.log;--}}
+{{--        defaultLog(event);--}}
+{{--    },--}}
+{{--    // to use default record option--}}
+{{--    recordLog: true,--}}
+{{--    });--}}
+{{--</script>--}}
 <body>
 Shuffle moves: <input id="moveCount" type="number" value="1000">
 
