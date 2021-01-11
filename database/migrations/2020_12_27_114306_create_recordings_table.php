@@ -20,7 +20,7 @@ class CreateRecordingsTable extends Migration
             $table->json('session_data');
             $table->uuid('viewport_page_id')->index();
             $table->foreign('viewport_page_id')->references('id')->on('viewport_pages')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedInteger('timing');
+            $table->string('timing');
         });
     }
 

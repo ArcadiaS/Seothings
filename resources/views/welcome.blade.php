@@ -3,12 +3,6 @@
 
 <head>
     <title>Shuffle Comparison</title>
-{{--    <script src="bundle.js"></script>--}}
-{{--    <script>--}}
-{{--        replayjs('auth', {--}}
-{{--            site_id: 100000--}}
-{{--        })--}}
-{{--    </script>--}}
 {{--    <script src="rrweb.js"></script>--}}
 {{--<script>--}}
 
@@ -22,6 +16,15 @@
 {{--    recordLog: true,--}}
 {{--    });--}}
 {{--</script>--}}
+
+
+    <script src="{{asset('bundle.js')}}"></script>
+    <script>
+        replayjs('auth', {
+            site_id: 100000
+        })
+    </script>
+
 <body>
 Shuffle moves: <input id="moveCount" type="number" value="1000">
 
