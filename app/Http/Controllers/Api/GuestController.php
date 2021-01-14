@@ -29,6 +29,57 @@ class GuestController extends Controller
         return response()->json($sessions);
     }
 
+    public function dataaaa(Website $website, GuestSession $guestSession)
+    {
+        $session = $guestSession->load('viewports.viewport_pages.recordings');
+        $recordings = $guestSession->recordings()->orderBy('session_data->timing')->get();
+
+        $domFirst = $recordings->where('recording_type', (string)RecordingType::INITIALIZE())->first();
+        $root = $domFirst->session_data;
+        $domChanges = $recordings->where('recording_type', (string)RecordingType::CHANGES())
+            ->values()->groupBy('timing');
+        $domChanges = $this->mergeData($domChanges)->toArray();
+        //ksort($domChanges);
+        $mouseClicks = $this->getData($recordings, RecordingType::CLICK())->toArray();
+        //ksort($mouseClicks);
+        $networkRequests = $this->getData($recordings, RecordingType::NETWORK())->toArray();
+        //ksort($networkRequests);
+        $consoleMessages = $this->getData($recordings, RecordingType::CONSOLE())->toArray();
+        //ksort($consoleMessages);
+        $windowSize = $recordings->where('recording_type', (string)RecordingType::WINDOWSIZE)->first()->session_data;
+        //$windowSize = $recordings->where('recording_type', 4)->first();
+        //if ($windowSize) $windowSize = $windowSize->session_data;
+        $windowSizes = $this->getData($recordings, RecordingType::WINDOWSIZE())->toArray();
+        //ksort($windowSizes);
+        $scrollEvents = $this->getData($recordings, RecordingType::SCROLL())->toArray();
+        //ksort($scrollEvents);
+        $focusActivities = $this->getData($recordings, RecordingType::FOCUS())->toArray();
+        //ksort($focusActivities);
+        $tabVisibility = $this->getData($recordings, RecordingType::TABVISIBILITY())->toArray();
+        //ksort($tabVisibility);
+        $mouseMovements = $this->getData($recordings, RecordingType::MOVEMENT())->toArray();
+        //ksort($mouseMovements);
+
+        $session->root = $root;
+        $session->dom_changes = $domChanges;
+        $session->start_timing = $session->created_at->valueOf();
+        $session->mouse_clicks = $mouseClicks;
+        $session->network_requests = $networkRequests;
+        $session->console_messages = $consoleMessages;
+
+        $session->window_size = $windowSize;
+        $session->window_size_changes = $windowSizes;
+        $session->scroll_events = $scrollEvents;
+        $session->focus_activity = $focusActivities;
+        $session->tab_visibility = $tabVisibility;
+        $session->mouse_movements = $mouseMovements;
+
+
+        unset($session['viewports']);
+        $session->viewports = $session->viewports()->get()->pluck('id');
+
+        return response()->json($session);
+    }
     /**
      * Display the specified resource.
      *

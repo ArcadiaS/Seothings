@@ -5,6 +5,7 @@ namespace App\Jobs\Websocket;
 use App\Enums\RecordingType;
 use App\Models\Guest;
 use App\Models\GuestSession;
+use App\Models\SessionViewport;
 use App\Rules\TimestampRule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -51,9 +52,14 @@ class RecordDomInitialize implements ShouldQueue
         // \Log::warning(json_encode($this->get_domaininfo($this->data->baseHref)));
 
         /** @var $viewport \App\Models\SessionViewport */
-        $viewport = $session->viewports()->firstOrCreate([
-            'id' => $this->data->viewport,
-        ]);
+        if (SessionViewport::where('guest_session_id', $session->id)->where('id', $this->data->viewport)->exists()){
+            $viewport = SessionViewport::where('guest_session_id', $session->id)->where('id', $this->data->viewport)->first();
+        }else{
+            $viewport = $session->viewports()->firstOrCreate([
+                'id' => $this->data->viewport,
+            ]);
+        }
+
 
         /** @var $page \App\Models\ViewportPage */
         $page = $viewport->viewport_pages()

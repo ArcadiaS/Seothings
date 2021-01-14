@@ -40,6 +40,7 @@ class RecordMouseMovement implements ShouldQueue
     public function handle()
     {
         $data = json_encode($this->data);
+        \Log::info("MOVEMENT". $data);
         $viewport_id = $this->data[0]->viewport;
         $validator = Validator::make((array)$this->data, $this->rules());
         if ($validator->fails()) {
