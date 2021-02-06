@@ -26,11 +26,41 @@
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
-    <script src="bundle.js"></script>
+{{--    <script src="bundle.js"></script>--}}
+{{--    <script>--}}
+{{--        replayjs('auth', {--}}
+{{--            site_id: 100000--}}
+{{--        })--}}
+{{--    </script>--}}
+
+    <script src="rrweb.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/rrweb-player@latest/dist/index.js"></script>
+
     <script>
-        replayjs('auth', {
-            site_id: 100000
-        })
+        var events = []
+
+        rrweb.record({
+            emit(event) {
+                console.log(event)
+            },
+        });
+
+        // this function will send events to the backend and reset the events array
+        function save() {
+            console.log(events)
+            clearInterval(set);
+            new rrwebPlayer({
+                target: document.body, // customizable root element
+                data: {
+                    events,
+                    autoPlay: true,
+                },
+            });
+        }
+
+
+        // save events every 10 seconds
+        var set = setInterval(save, 5 * 1000);
     </script>
 </head>
 <body>

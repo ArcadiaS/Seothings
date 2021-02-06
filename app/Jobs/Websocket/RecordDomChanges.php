@@ -40,29 +40,27 @@ class RecordDomChanges implements ShouldQueue
      */
     public function handle()
     {
-        $data = json_encode($this->data);
-        $validator = Validator::make((array)$this->data, $this->rules());
-
+        $data = json_encode($this->data->changes);
         $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
 
         /** @var $viewport \App\Models\SessionViewport */
         $viewport = $session->viewports()->firstOrCreate([
-            'id' => $this->data->viewport,
+            'id' => $this->data->vars->viewport,
         ]);
 
         /** @var $page \App\Models\ViewportPage */
         $page = $viewport->viewport_pages()
             ->latest()
-            ->where('id', $this->data->page)
+            ->where('id', $this->data->vars->page)
             ->limit(1)
             ->firstOrCreate([
-                'id' => $this->data->page,
+                'id' => $this->data->vars->page,
             ]);
 
         $page->recordings()->create([
             'recording_type' => 1,
             'session_data' => json_decode($data),
-            'timing' => json_decode($data)->timing
+            'timing' => json_decode($data)->timestamp
         ]);
     }
 
