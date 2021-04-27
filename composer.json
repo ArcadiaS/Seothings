@@ -27,6 +27,7 @@
         "pusher/pusher-php-server": "^4.1",
         "react/dns": "^1.4",
         "santigarcor/laratrust": "^6.3",
+        "spatie/laravel-medialibrary": "^9.5",
         "staudenmeir/eloquent-has-many-deep": "^1.13",
         "vinkla/hashids": "^9.1"
     },

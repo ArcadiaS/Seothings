@@ -42,4 +42,8 @@ class Website extends Model
         return $this->hasOne(WebsiteSetting::class);
     }
     
+    public function surveys()
+    {
+        return $this->hasMany(Survey::class);
+    }
 }
