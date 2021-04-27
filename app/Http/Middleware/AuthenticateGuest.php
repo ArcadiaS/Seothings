@@ -41,9 +41,9 @@ class AuthenticateGuest
 
                 $host = $request->getHttpHost();
 
-                if (Str::contains(parse_url($guest->website->url, PHP_URL_HOST), $host)) {
+                //if (Str::contains(parse_url($guest->website->url, PHP_URL_HOST), $host)) {
                     \Auth::login($guest);
-                }
+                //}
             }
         }
 

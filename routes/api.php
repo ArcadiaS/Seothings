@@ -27,7 +27,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::apiResource('teams', TeamController::class);
     Route::apiResource('websites', WebsiteController::class);
     Route::apiResource('websites.guest-sessions', GuestController::class)->only(['index', 'show']);
-    Route::post('websites/{website}/guest-sessions/{guest_session}', [GuestController::class, 'dataaaa']);
+    Route::post('websites/{website}/guest-sessions/{guest_session}', [GuestController::class, 'show']);
 
 
 });

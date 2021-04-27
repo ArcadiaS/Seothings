@@ -15,7 +15,8 @@ class RegisterController extends Controller
     {
         $user = User::create($request->validated());
 
-        event(new Registered($user));
+        // todo: disabled for now
+        //event(new Registered($user));
 
         $accessToken = $user->createToken('before_verify_token')->accessToken;
 

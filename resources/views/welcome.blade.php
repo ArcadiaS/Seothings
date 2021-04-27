@@ -27,7 +27,7 @@
 
     <script src="bundle.js"></script>
     <script>
-        seoptie('auth', {
+        replayjs('auth', {
                     site_id: 100000
                 })
     </script>

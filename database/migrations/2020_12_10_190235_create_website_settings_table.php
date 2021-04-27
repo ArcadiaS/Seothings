@@ -25,6 +25,8 @@ class CreateWebsiteSettingsTable extends Migration
             $table->boolean('notify_via_email')->default(false);
             $table->string('notify_email')->nullable();
             $table->enum('notify_interval_type', NotifyIntervalType::getValues());
+            $table->unsignedBigInteger('website_id');
+            $table->foreign('website_id')->references('id')->on('websites')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

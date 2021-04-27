@@ -36,4 +36,10 @@ class Website extends Model
     {
         return $this->hasMany(Guest::class);
     }
+    
+    public function settings()
+    {
+        return $this->hasOne(WebsiteSetting::class);
+    }
+    
 }
