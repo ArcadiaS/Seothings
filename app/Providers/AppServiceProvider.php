@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Services\AssetService;
 use App\Services\GuestService;
-use App\WebSocketHandlers\ClientSocketHandler;
+use App\SocketHandlers\ClientSocketHandler;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use BeyondCode\LaravelWebSockets\Server\Logger\WebsocketsLogger;
 use Illuminate\Support\ServiceProvider;
@@ -29,7 +29,8 @@ class AppServiceProvider extends ServiceProvider
         app()->singleton(WebsocketsLogger::class, function () {
             return (new WebsocketsLogger(new ConsoleOutput()))->enable(true);
         });
-
+    
+        
         Cashier::ignoreMigrations();
     }
 

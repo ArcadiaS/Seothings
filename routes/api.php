@@ -4,7 +4,6 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\InitializeController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\VerificationController;
-use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\GuestController;
 use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\AssetController;
@@ -20,14 +19,12 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::post('me', [AuthController::class, 'authenticatedUser']);
+    Route::get('me', [AuthController::class, 'authenticatedUser']);
     Route::post('initialize', InitializeController::class);
 
-    Route::apiResource('companies', CompanyController::class);
-    Route::apiResource('teams', TeamController::class);
     Route::apiResource('websites', WebsiteController::class);
+    Route::get('websites/{website}/status', [WebsiteController::class, 'showStatus']);
     Route::apiResource('websites.guest-sessions', GuestController::class)->only(['index', 'show']);
     Route::post('websites/{website}/guest-sessions/{guest_session}', [GuestController::class, 'show']);
-
-
+    
 });

@@ -15,12 +15,13 @@ class RegisterController extends Controller
     {
         $user = User::create($request->validated());
 
-        // todo: disabled for now
-        //event(new Registered($user));
-
         $accessToken = $user->createToken('before_verify_token')->accessToken;
 
-        $user->attachRole(Role::firstWhere('name', 'Recording'));
+        //$user->attachRole(Role::firstWhere('name', 'Recording'));
+        // todo: disabled for now
+        // info: role sistemi team 'e taşınabilir
+        //event(new Registered($user));
+        
 
         return response()->json([
             'access_token' => $accessToken,

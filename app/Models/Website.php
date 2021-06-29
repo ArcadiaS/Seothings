@@ -15,7 +15,7 @@ class Website extends Model
         'url',
         'secret_key',
         'type',
-        'company_id',
+        'team_id',
     ];
 
     protected $casts = [
@@ -27,9 +27,9 @@ class Website extends Model
         return WebsiteType::fromValue($this->type)->description;
     }
 
-    public function company()
+    public function team()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Team::class);
     }
 
     public function guests()
@@ -46,4 +46,5 @@ class Website extends Model
     {
         return $this->hasMany(Survey::class);
     }
+
 }

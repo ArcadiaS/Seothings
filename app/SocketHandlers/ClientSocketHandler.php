@@ -1,6 +1,6 @@
 <?php
 
-namespace App\WebSocketHandlers;
+namespace App\SocketHandlers;
 
 use App\Jobs\Websocket\CacheWebRecorderAssets;
 use App\Jobs\Websocket\MarkChatMessageAsRead;
@@ -30,12 +30,12 @@ class ClientSocketHandler extends WebSocketHandler
      * @var \App\Services\GuestService
      */
     private $guestService;
-
+    
     /**
      * ClientSocketHandler constructor.
      *
-     * @param  \BeyondCode\LaravelWebSockets\WebSockets\Channels\ChannelManager  $channelManager
-     * @param  \App\Services\GuestService  $guestService
+     * @param \BeyondCode\LaravelWebSockets\WebSockets\Channels\ChannelManager $channelManager
+     * @param \App\Services\GuestService                                       $guestService
      */
     public function __construct(ChannelManager $channelManager, GuestService $guestService)
     {
@@ -43,16 +43,16 @@ class ClientSocketHandler extends WebSocketHandler
         parent::__construct($channelManager);
         $this->guestService = $guestService;
     }
-
+    
     public function onOpen(ConnectionInterface $connection)
     {
         parent::onOpen($connection);
         $ipAddress = $connection->remoteAddress;
         $userAgent = $connection->httpRequest->getHeader('User-Agent')[0];
         $site_id = QueryParameters::create($connection->httpRequest)->get('site_id');
-
+        
         $session = $this->guestService->getSession($site_id, $ipAddress, $userAgent);
-
+        
         $connection->send(json_encode([
             'event' => 'auth',
             'data' => [
@@ -60,13 +60,13 @@ class ClientSocketHandler extends WebSocketHandler
                 "session" => $session->id,
                 "expires" => \Carbon\Carbon::now()->addHours(1),
             ],
-        ]));
+        ], JSON_THROW_ON_ERROR));
     }
-
+    
     public function onMessage(ConnectionInterface $connection, MessageInterface $message)
     {
         parent::onMessage($connection, $message);
-
+        
         $messagePayload = json_decode($message->getPayload());
         
         switch (str_replace('client-', '', $messagePayload->event)) {
@@ -111,10 +111,10 @@ class ClientSocketHandler extends WebSocketHandler
                 dispatch(new RecordFocusChange($this->getId($messagePayload), $messagePayload->data));
                 break;
             default:
-                dump("dumping".$messagePayload->event);
+                dump("dumping" . $messagePayload->event);
         }
     }
-
+    
     private function getId($messagePayload)
     {
         return Str::after($messagePayload->channel, '.');

@@ -23,8 +23,8 @@ class CreateWebsitesTable extends Migration
             $table->string('domain', '155')->nullable();
             $table->string('host', '50')->nullable();
             $table->enum('type', WebsiteType::getValues())->nullable();
-            $table->unsignedBigInteger('company_id');
-            $table->foreign('company_id')->references('id')->on('companies');
+            $table->unsignedBigInteger('team_id');
+            $table->foreign('team_id')->references('id')->on('teams');
             $table->boolean('verified')->default(false);
             $table->timestamps();
         });

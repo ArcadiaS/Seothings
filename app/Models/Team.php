@@ -42,10 +42,10 @@ class Team extends LaratrustTeam
             ->orderBy('subscriptions.created_at', 'desc');
     }
 
-    public function company()
+    public function website()
     {
-        return $this->hasOne(Company::class);
+        return $this->hasOne(Website::class);
     }
-
+    
 
 }

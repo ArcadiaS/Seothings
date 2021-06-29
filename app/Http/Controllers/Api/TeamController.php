@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Api\Teams\TeamResource;
 use Illuminate\Http\Request;
 
 class TeamController extends Controller
@@ -13,11 +12,9 @@ class TeamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $teams = $request->user()->teams()->load('users')->get();
-
-        return TeamResource::collection($teams);
+        //
     }
 
     /**

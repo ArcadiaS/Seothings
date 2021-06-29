@@ -29,5 +29,10 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
-
+    
+    'stripe' => [
+        'model'  => \App\Models\Team::class,
+        'key'    => env('STRIPE_API_PUBLIC'),
+        'secret' => env('STRIPE_API_SECRET'),
+    ],
 ];

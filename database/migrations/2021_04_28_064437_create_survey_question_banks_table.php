@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCompaniesTable extends Migration
+class CreateSurveyQuestionBanksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateCompaniesTable extends Migration
      */
     public function up()
     {
-        Schema::create('companies', function (Blueprint $table) {
+        Schema::create('survey_question_banks', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255)->default('My Company');
-            $table->unsignedBigInteger('team_id')->index();
-            $table->foreign('team_id')->references('id')->on('teams');
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ class CreateCompaniesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('companies');
+        Schema::dropIfExists('survey_question_banks');
     }
 }

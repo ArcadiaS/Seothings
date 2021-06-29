@@ -14,6 +14,13 @@ class WebsiteResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'url' => $this->url,
+            'type' => $this->type, // todo:  make resource for ENUMS and DESCRIPTIONS
+            'verified' => $this->verified,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
+        ];
     }
 }
