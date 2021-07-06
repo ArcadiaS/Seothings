@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Api\Subscription;
 
+use App\Http\Resources\Api\Plan\PlanResource;
+use App\Models\Plan;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SubscriptionItemResource extends JsonResource
@@ -18,7 +20,7 @@ class SubscriptionItemResource extends JsonResource
           'id' => $this->id,
           'subscription_id' => $this->subscription_id,
           'stripe_id' => $this->stripe_id,
-          'stripe_plan' => $this->stripe_plan,
+          'stripe_plan' => PlanResource::make(Plan::where('provider_id', $this->stripe_plan)->first()),
           'quantity' => $this->quantity,
         ];
     }

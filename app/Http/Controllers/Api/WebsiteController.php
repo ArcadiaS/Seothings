@@ -7,16 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Websites\StoreWebsiteRequest;
 use App\Http\Resources\Api\Teams\TeamResource;
 use App\Http\Resources\Api\Websites\WebsiteResource;
-use App\Models\GuestSession;
 use App\Models\Plan;
-use App\Models\Team;
 use App\Models\Website;
 use App\Teams\Roles;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\DB;
 
 class WebsiteController extends Controller
 {
@@ -43,27 +40,28 @@ class WebsiteController extends Controller
      */
     public function store(StoreWebsiteRequest $request)
     {
-        $name = $request->company_name ?? $request->website_url;
-        $team = Team::create([
-            'name' => $name,
+        /** @var Website $website */
+        $website = Website::create([
+            'url' => $request->website_url,
+            'type' => $request->website_type ?? WebsiteType::OTHER,
         ]);
-        // todo: can be moved to observers
-        $team->createOrGetStripeCustomer(['email' => $request->user()->email, 'description' => $name.'\'s Team']);
-        
+    
+        // info: move this to observer
+        $website->createOrGetStripeCustomer(['email' => $request->user()->email, 'description' => $request->company_name.'\'s Team']);
+    
         $plan = Plan::where('name', 'free_plan')->first();
     
-        $team->newSubscription($plan->name, $plan->provider_id)->add();
+        $website->newSubscription($plan->name, $plan->provider_id)->add();
+    
+        $team = $website->team()->create([
+            'name' => $request->company_name,
+        ]);
     
         $request->user()->teams()->attach($team);
     
         $request->user()->attachRole(Roles::$roleWhenCreatingTeam, $team->id);
-    
-        $team->website()->create([
-            'url' => $request->website_url,
-            'type' => $request->website_type ?? WebsiteType::OTHER,
-        ]);
         
-        return response()->json($team, 201);
+        return response()->json($website, 201);
     }
     
     /**
@@ -128,20 +126,21 @@ class WebsiteController extends Controller
             $time_difference = Carbon::now()->diffInDays(Carbon::parse($latest_guest->created_at));
         }
     
-        $total_sessions = $website->guests()->withCount('sessions')->get()->sum('sessions_count');
-        $montly_records = GuestSession::select(DB::raw("(COUNT(*)) as count"),DB::raw("MONTHNAME(created_at) as monthname"))
-            ->whereHas('guest', function($q){
-                return $q->where('website_id', 100000);
-            })
-            ->whereYear('created_at', date('Y'))
-            ->groupBy('monthname')
-            ->get();
+        $sessions = $website->guests()->withCount('sessions')->get();
+        $total_sessions = $sessions->sum('sessions_count');
+        $total_sessions_today = $sessions->where('created_at', '>', Carbon::now()->startOfDay())->withCount('sessions')->get()->sum('sessions_count');
+        //$montly_records = GuestSession::select(DB::raw("(COUNT(*)) as count"),DB::raw("MONTHNAME(created_at) as monthname"))
+        //    ->whereHas('guest', function($q){
+        //        return $q->where('website_id', 100000);
+        //    })
+        //    ->whereYear('created_at', date('Y'))
+        //    ->groupBy('monthname')
+        //    ->get();
         
         return response()->json([
-            'latest_record' => $latest_guest,
-            'time_difference' => $time_difference,
+            'latest_record' => $time_difference,
             'total_sessions' => $total_sessions,
-            'montly_records' => $montly_records
+            'total_sessions_today' => $total_sessions_today
         ], 200);
     }
 }

@@ -12,7 +12,8 @@ class Team extends LaratrustTeam
     use HasFactory, Billable;
 
     protected $fillable = [
-        'name'
+        'name',
+        'website_id'
     ];
 
     public function ownedBy(User $user)
@@ -31,20 +32,9 @@ class Team extends LaratrustTeam
             ->withTimestamps();
     }
 
-    public function subscriptions()
-    {
-        return $this->hasMany(Subscription::class, $this->getForeignKey())->orderBy('created_at', 'desc');
-    }
-
-    public function plans()
-    {
-        return $this->hasManyThrough(Plan::class, Subscription::class, 'team_id', 'provider_id', 'id', 'stripe_plan')
-            ->orderBy('subscriptions.created_at', 'desc');
-    }
-
     public function website()
     {
-        return $this->hasOne(Website::class);
+        return $this->belongsTo(Website::class);
     }
     
 

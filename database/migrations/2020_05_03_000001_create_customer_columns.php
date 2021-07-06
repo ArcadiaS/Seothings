@@ -13,7 +13,7 @@ class CreateCustomerColumns extends Migration
      */
     public function up()
     {
-        Schema::table('teams', function (Blueprint $table) {
+        Schema::table('websites', function (Blueprint $table) {
             $table->string('stripe_id')->nullable()->index();
             $table->string('card_brand')->nullable();
             $table->string('card_last_four', 4)->nullable();
@@ -28,7 +28,7 @@ class CreateCustomerColumns extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('websites', function (Blueprint $table) {
             $table->dropColumn([
                 'stripe_id',
                 'card_brand',

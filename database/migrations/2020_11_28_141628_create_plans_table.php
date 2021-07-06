@@ -17,7 +17,16 @@ class CreatePlansTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('provider_id');
-            $table->boolean('teams')->default(0);
+            $table->boolean('recording')->default(0);
+            $table->boolean('recording_limit')->default(0);
+            $table->boolean('survey')->default(0);
+            $table->boolean('survey_limit')->default(0);
+            $table->boolean('feedback')->default(0);
+            $table->boolean('feedback_limit')->default(0);
+            $table->boolean('audit')->default(0);
+            $table->boolean('audit_limit')->default(0);
+            $table->boolean('tracker')->default(0);
+            $table->boolean('tracker_limit')->default(0);
             $table->integer('teams_limit')->nullable()->default(null);
             $table->timestamps();
         });

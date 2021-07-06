@@ -17,29 +17,65 @@ class PlanSeeder extends Seeder
         $plans[] = [
             'name' => 'free_plan',
             'provider_id' => 'prod_IYBlsKVS4tzJqB',
-            'teams' => 1,
-            'teams_limit' => 3
+            'recording' => 1,
+            'recording_limit' => 1,
+            'survey' => 1,
+            'survey_limit' => 1,
+            'feedback' => 1,
+            'feedback_limit' => 1,
+            'audit' => 1,
+            'audit_limit' => 1,
+            'tracker' => 1,
+            'tracker_limit' => 1,
+            'teams_limit' => 3,
         ];
         
         $plans[] = [
             'name' => 'small_1',
             'provider_id' => 'prod_JkO0WCLCcoJzTa',
-            'teams' => 1,
-            'teams_limit' => 10
+            'recording' => 1,
+            'recording_limit' => 1,
+            'survey' => 1,
+            'survey_limit' => 1,
+            'feedback' => 1,
+            'feedback_limit' => 1,
+            'audit' => 1,
+            'audit_limit' => 1,
+            'tracker' => 1,
+            'tracker_limit' => 1,
+            'teams_limit' => 3,
         ];
 
         $plans[] = [
             'name' => 'medium_1',
             'provider_id' => 'prod_JkO02UTihx089k',
-            'teams' => 1,
-            'teams_limit' => 10
+            'recording' => 1,
+            'recording_limit' => 1,
+            'survey' => 1,
+            'survey_limit' => 1,
+            'feedback' => 1,
+            'feedback_limit' => 1,
+            'audit' => 1,
+            'audit_limit' => 1,
+            'tracker' => 1,
+            'tracker_limit' => 1,
+            'teams_limit' => 3,
         ];
         
         $plans[] = [
             'name' => 'large_1',
             'provider_id' => 'prod_JkO1XZmX46KDGg',
-            'teams' => 1,
-            'teams_limit' => 10
+            'recording' => 1,
+            'recording_limit' => 1,
+            'survey' => 1,
+            'survey_limit' => 1,
+            'feedback' => 1,
+            'feedback_limit' => 1,
+            'audit' => 1,
+            'audit_limit' => 1,
+            'tracker' => 1,
+            'tracker_limit' => 1,
+            'teams_limit' => 3,
         ];
 
         foreach ($plans as $plan){

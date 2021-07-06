@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Subscription;
+use App\Models\SubscriptionItem;
 use App\Services\AssetService;
 use App\Services\GuestService;
 use App\SocketHandlers\ClientSocketHandler;
