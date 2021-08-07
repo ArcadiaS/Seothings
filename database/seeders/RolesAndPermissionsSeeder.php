@@ -37,17 +37,5 @@ class RolesAndPermissionsSeeder extends Seeder
         
         
         
-        
-        User::create([
-            'name' => 'Kaan',
-            'surname' => 'Kahraman',
-            'email' => 'kaane.kahramane@gmail.com',
-            'password' => bcrypt('adsasd123'),
-        ]);
-        
-        Website::create([
-            
-        ]);
-        
     }
 }
