@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Permission;
 use App\Models\Role;
+use App\Models\User;
+use App\Models\Website;
 use App\Teams\Roles;
 use Illuminate\Database\Seeder;
 
@@ -32,5 +34,20 @@ class RolesAndPermissionsSeeder extends Seeder
 
         Role::firstOrCreate(['name' => 'Recording']);
         Role::firstOrCreate(['name' => 'Heatmap']);
+        
+        
+        
+        
+        User::create([
+            'name' => 'Kaan',
+            'surname' => 'Kahraman',
+            'email' => 'kaane.kahramane@gmail.com',
+            'password' => bcrypt('adsasd123'),
+        ]);
+        
+        Website::create([
+            
+        ]);
+        
     }
 }
