@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Websites\StoreWebsiteRequest;
 use App\Http\Resources\Api\Teams\TeamResource;
 use App\Http\Resources\Api\Websites\WebsiteResource;
+use App\Models\GuestSession;
 use App\Models\Plan;
 use App\Models\Website;
 use App\Teams\Roles;
@@ -14,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class WebsiteController extends Controller
 {
@@ -129,18 +131,35 @@ class WebsiteController extends Controller
         $sessions = $website->guests()->withCount('sessions')->get();
         $total_sessions = $sessions->sum('sessions_count');
         $total_sessions_today = $sessions->where('created_at', '>', Carbon::now()->startOfDay())->withCount('sessions')->get()->sum('sessions_count');
-        //$montly_records = GuestSession::select(DB::raw("(COUNT(*)) as count"),DB::raw("MONTHNAME(created_at) as monthname"))
-        //    ->whereHas('guest', function($q){
-        //        return $q->where('website_id', 100000);
-        //    })
-        //    ->whereYear('created_at', date('Y'))
-        //    ->groupBy('monthname')
-        //    ->get();
+        
+        $weekly_reports = GuestSession::select(DB::raw("(COUNT(*)) as count"),DB::raw("WEEKDAY(created_at) as dayname"))
+            ->whereHas('guest', function($q){
+                return $q->where('website_id', 100000);
+            })
+            ->whereDate('created_at', '>=', Carbon::now()->startOfWeek(1))
+            ->whereDate('created_at', '<=', Carbon::now()->endOfWeek(1))
+            ->groupBy('dayname')
+            ->get();
+    
+        $days = ['Monday','Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    
+        if ($weekly_reports->count()){
+            for ($i = 0; $i <= 7; $i++){
+                if (!$weekly_reports->contains('dayname', $i)){
+                    $weekly_reports->push([
+                        'count' => 0,
+                        'dayname' => $i
+                    ]);
+                }
+            }
+        }
+        $weekly_reports = $weekly_reports->sortBy('dayname')->values();
         
         return response()->json([
             'latest_record' => $time_difference,
             'total_sessions' => $total_sessions,
-            'total_sessions_today' => $total_sessions_today
+            'total_sessions_today' => $total_sessions_today,
+            'weekly_sessions' => $weekly_reports
         ], 200);
     }
 }

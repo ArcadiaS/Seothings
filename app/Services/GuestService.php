@@ -7,6 +7,7 @@ use App\Models\GuestSession;
 use App\Models\Website;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Jenssegers\Agent\Agent;
 
 class GuestService
 {
@@ -23,10 +24,24 @@ class GuestService
     public function getSession($site_id, $ipAddress, $userAgent)
     {
         $guest = $this->getGuest($site_id, $ipAddress);
+    
+        $agent = new Agent();
+        $agent->setUserAgent($userAgent);
+        
         $session = GuestSession::where('updated_at', '>', Carbon::now()->sub('1', 'hour'))
             ->firstOrNew([
                 'guest_id' => $guest->id,
-                'user_agent' => $userAgent
+                'user_agent' => $userAgent,
+                'device' => $agent->device(),
+                'device_type' => $agent->deviceType(),
+                'browser' => $agent->browser(),
+                'browser_version' => $agent->version(),
+                'platform' => $agent->platform(),
+                'desktop' => $agent->isDesktop(),
+                'mobile' => $agent->isMobile(),
+                'phone' => $agent->isMobile(),
+                'tablet' => $agent->isTablet(),
+                'first_seen' => !$guest->sessions()->exists()
             ]);
         $session->touch();
         return $session;

@@ -7,6 +7,7 @@ use Closure;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use Jenssegers\Agent\Agent;
 
 class AuthenticateGuest
 {
@@ -41,10 +42,15 @@ class AuthenticateGuest
                 $guest->load('website');
 
                 $host = $request->getHttpHost();
-
-                //if (Str::contains(parse_url($guest->website->url, PHP_URL_HOST), $host)) {
+    
+                $agent = new Agent();
+                $agent->setUserAgent($request->userAgent());
+                if ($agent->isRobot()) return false;
+                
+                
+                if (Str::contains(parse_url($guest->website->url, PHP_URL_HOST), $host)) {
                     \Auth::login($guest);
-                //}
+                }
             }
         }
 

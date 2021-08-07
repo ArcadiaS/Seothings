@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\RecordingType;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\Recordings\SessionResource;
 use App\Models\Guest;
 use App\Models\GuestSession;
 use App\Models\Recording;
@@ -17,19 +18,22 @@ class GuestController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \App\Models\Website  $website
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Website $website
+     * @param GuestSession        $guest_session
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index(Website $website, GuestSession $guest_session)
     {
+        // todo: filters
         $sessions = GuestSession::select('guest_sessions.*', 'session_viewports.id as viewport_id')
             ->rightJoinRelationship('viewports')
             ->get();
 
-        return response()->json($sessions);
+        return SessionResource::collection($sessions);
     }
 
-    public function show(Website $website, GuestSession $guestSession)
+    public function show(Request $request, Website $website, GuestSession $guestSession)
     {
         ini_set('memory_limit', -1);
         $session = $guestSession->load('viewports.viewport_pages.recordings');
