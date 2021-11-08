@@ -15,6 +15,19 @@ class GuestSession extends Model
     protected $fillable = [
         'guest_id',
         'user_agent',
+        'device',
+        'device_type',
+        'browser',
+        'platform',
+        'platform_version',
+        'desktop',
+        'languages',
+        'is_robot',
+        'robot_name',
+        'first_seen',
+        'mobile',
+        'phone',
+        'tablet',
     ];
 
     /**

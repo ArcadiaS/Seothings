@@ -29,7 +29,7 @@ class SessionViewport extends Model
      */
     public $incrementing = false;
 
-    public function session()
+    public function guest_session()
     {
         return $this->belongsTo(GuestSession::class);
     }

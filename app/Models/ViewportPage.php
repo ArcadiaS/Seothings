@@ -29,7 +29,7 @@ class ViewportPage extends Model
      */
     public $incrementing = false;
 
-    public function viewport()
+    public function session_viewport()
     {
         return $this->belongsTo(SessionViewport::class);
     }

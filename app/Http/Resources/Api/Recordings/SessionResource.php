@@ -19,7 +19,6 @@ class SessionResource extends JsonResource
             'device' => $this->device,
             'device_type' => $this->device_type,
             'browser' => $this->browser,
-            'browser_version' => $this->browser_version,
             'platform' => $this->platform,
             'first_seen' => $this->first_seen,
             'desktop' => $this->desktop,

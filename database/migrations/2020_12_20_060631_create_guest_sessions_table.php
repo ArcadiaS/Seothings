@@ -19,7 +19,6 @@ class CreateGuestSessionsTable extends Migration
             $table->string('device')->nullable();
             $table->string('device_type')->nullable();
             $table->string('browser')->nullable();
-            $table->string('browser_version')->nullable();
             $table->string('platform')->nullable();
             $table->boolean('first_seen')->default(true);
             $table->boolean('desktop')->default(true);

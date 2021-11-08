@@ -35,7 +35,6 @@ class GuestService
                 'device' => $agent->device(),
                 'device_type' => $agent->deviceType(),
                 'browser' => $agent->browser(),
-                'browser_version' => $agent->version(),
                 'platform' => $agent->platform(),
                 'desktop' => $agent->isDesktop(),
                 'mobile' => $agent->isMobile(),
