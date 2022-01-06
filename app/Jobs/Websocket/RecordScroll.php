@@ -50,22 +50,15 @@ class RecordScroll implements ShouldQueue
         } else {
             $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
 
-            /** @var $viewport \App\Models\SessionViewport */
+            /** @var $viewport \App\Models\Viewport */
             $viewport = $session->viewports()->firstOrCreate([
                 'id' => $viewport_id,
             ]);
-
-            /** @var $page \App\Models\ViewportPage */
-            $page = $viewport->viewport_pages()
-                ->latest()
-                ->limit(1)
-                ->first();
-
+            // todo:  this will change. There will not FOREACH. Records will stored as how they came.
             foreach (json_decode($data) as $record){
-                $page->recordings()->create([
+                $viewport->recordings()->create([
                     'recording_type' => RecordingType::SCROLL,
                     'session_data' => $record,
-                    'timing' => $record->timing
                 ]);
             }
         }

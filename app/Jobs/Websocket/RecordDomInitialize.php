@@ -5,7 +5,7 @@ namespace App\Jobs\Websocket;
 use App\Enums\RecordingType;
 use App\Models\Guest;
 use App\Models\GuestSession;
-use App\Models\SessionViewport;
+use App\Models\Viewport;
 use App\Rules\TimestampRule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -51,26 +51,16 @@ class RecordDomInitialize implements ShouldQueue
         // todo: check website domain is match ? or direct sql to db for optimize
         // \Log::warning(json_encode($this->get_domaininfo($this->data->baseHref)));
 
-        /** @var $viewport \App\Models\SessionViewport */
-        if (SessionViewport::where('guest_session_id', $session->id)->where('id', $this->data->viewport)->exists()){
-            $viewport = SessionViewport::where('guest_session_id', $session->id)->where('id', $this->data->viewport)->first();
+        /** @var $viewport \App\Models\Viewport */
+        if (Viewport::where('guest_session_id', $session->id)->where('id', $this->data->viewport)->exists()){
+            $viewport = Viewport::where('guest_session_id', $session->id)->where('id', $this->data->viewport)->first();
         }else{
             $viewport = $session->viewports()->firstOrCreate([
                 'id' => $this->data->viewport,
             ]);
         }
-
-
-        /** @var $page \App\Models\ViewportPage */
-        $page = $viewport->viewport_pages()
-            ->latest()
-            ->where('id', $this->data->page)
-            ->limit(1)
-            ->firstOrCreate([
-                'id' => $this->data->page,
-            ]);
-
-        $page->recordings()->create([
+    
+        $viewport->recordings()->create([
             'recording_type' => RecordingType::INITIALIZE,
             'session_data' => json_decode($data),
             'timing' => json_decode($data)->timing,

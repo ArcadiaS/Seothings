@@ -15,18 +15,16 @@ class Recording extends Model
     protected $fillable = [
         'recording_type',
         'session_data',
-        'viewport_page_id',
-        'timing',
+        'viewport_id',
     ];
 
     protected $casts = [
-        'user_info' => 'json',
         'recording_type' => RecordingType::class,
         'session_data' => 'json',
     ];
 
-    public function viewport_page()
+    public function viewport()
     {
-        return $this->belongsTo(ViewportPage::class);
+        return $this->belongsTo(Viewport::class);
     }
 }

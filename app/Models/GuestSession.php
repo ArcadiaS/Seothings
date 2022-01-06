@@ -51,11 +51,11 @@ class GuestSession extends Model
 
     public function viewports()
     {
-        return $this->hasMany(SessionViewport::class);
+        return $this->hasMany(Viewport::class);
     }
 
     public function recordings()
     {
-        return $this->hasManyDeep(Recording::class, [SessionViewport::class, ViewportPage::class]);
+        return $this->hasManyDeep(Recording::class, [Viewport::class, ViewportPage::class]);
     }
 }

@@ -35,6 +35,6 @@ class TimestampRule implements Rule
      */
     public function message()
     {
-        return 'The validation error message.';
+        return 'Timing value is wrong.';
     }
 }

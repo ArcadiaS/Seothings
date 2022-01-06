@@ -5,18 +5,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     
-    return view('welcome2');
-});
-
-Route::get('/test', function (){
-    $url = 'http://www.seothings.test';
-    dd(filter_var($url, FILTER_VALIDATE_URL));
-    dd(parse_url($url, PHP_URL_PATH));
+    return view('welcome3');
 });
 
 Route::post('test', function (\Illuminate\Http\Request $request) {
+    \Illuminate\Support\Facades\Log::info(json_encode($request->all()));
     DB::table('testing')->insert([
-       'data' => $request->data
+       'data' => json_encode($request->all())
     ]);
 
     return 'true';

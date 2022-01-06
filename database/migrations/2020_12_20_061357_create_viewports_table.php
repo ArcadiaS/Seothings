@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateViewportPagesTable extends Migration
+class CreateViewportsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateViewportPagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('viewport_pages', function (Blueprint $table) {
-            $table->uuid('id')->index();
-            $table->uuid('session_viewport_id')->index();
-            $table->foreign('session_viewport_id')->references('id')->on('session_viewports')->onDelete('cascade')->onUpdate('cascade');
+        Schema::create('viewports', function (Blueprint $table) {
+            $table->uuid('id')->primary()->index();
+            $table->uuid('guest_session_id')->index();
+            $table->foreign('guest_session_id')->references('id')->on('guest_sessions')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateViewportPagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('viewport_pages');
+        Schema::dropIfExists('viewports');
     }
 }

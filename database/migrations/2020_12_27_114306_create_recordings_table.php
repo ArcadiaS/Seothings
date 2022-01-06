@@ -18,9 +18,8 @@ class CreateRecordingsTable extends Migration
             $table->id()->index();
             $table->enum('recording_type', RecordingType::getValues());
             $table->json('session_data');
-            $table->uuid('viewport_page_id')->index();
-            $table->foreign('viewport_page_id')->references('id')->on('viewport_pages')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('timing');
+            $table->uuid('viewport_id')->index();
+            $table->foreign('viewport_id')->references('id')->on('viewports')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

@@ -47,21 +47,14 @@ class RecordClick implements ShouldQueue
         } else {
             $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
 
-            /** @var $viewport \App\Models\SessionViewport */
+            /** @var $viewport \App\Models\Viewport */
             $viewport = $session->viewports()->firstOrCreate([
                 'id' => $this->data->viewport,
             ]);
-
-            /** @var $page \App\Models\ViewportPage */
-            $page = $viewport->viewport_pages()
-                ->latest()
-                ->limit(1)
-                ->first();
-
-            $page->recordings()->create([
+    
+            $viewport->recordings()->create([
                 'recording_type' => RecordingType::CLICK,
                 'session_data' => json_decode($data),
-                'timing' => json_decode($data)->timing
             ]);
         }
     }
@@ -72,7 +65,7 @@ class RecordClick implements ShouldQueue
             'timing' => ['required', new TimestampRule],
             'x' => 'required|numeric',
             'y' => 'required|numeric',
-            'viewport' => ['required', 'uuid'], // todo: rule:in  viewports id
+            'viewport' => ['required', 'uuid'],
         ];
     }
 }
