@@ -37,7 +37,7 @@ class GuestController extends Controller
     {
         ini_set('memory_limit', -1);
         $session = $guestSession->load('viewports.recordings');
-        $recordings = $guestSession->recordings()->orderBy('session_data.timing')->get();
+        $recordings = $guestSession->recordings()->orderBy('session_data->timing')->get();
         $root = $recordings->shift();
     
         $session->root = $root->session_data;

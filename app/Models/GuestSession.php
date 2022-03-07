@@ -14,20 +14,31 @@ class GuestSession extends Model
 
     protected $fillable = [
         'guest_id',
-        'user_agent',
-        'device',
-        'device_type',
-        'browser',
-        'platform',
+        'user_agent', chrome firefox
+        'device', -  android ios desktop
+        'device_type', mobile  tablet  web
+        'browser',  - chrome 10.9
+        'platform', - windows linux
         'platform_version',
-        'desktop',
-        'languages',
-        'is_robot',
-        'robot_name',
-        'first_seen',
-        'mobile',
-        'phone',
+        'desktop', = true false
+        'languages',  EN  TR
+        'is_robot', ->  true false
+        'robot_name', xxxx
+        'first_seen', ->  true false
+        'mobile',  true false
+        'phone', ios android
         'tablet',
+    
+    -> /contact
+-> contact   /paris
+
+
+50 sayfa
+
+2.5dk
+
+
+
     ];
 
     /**
@@ -56,6 +67,6 @@ class GuestSession extends Model
 
     public function recordings()
     {
-        return $this->hasManyDeep(Recording::class, [Viewport::class, ViewportPage::class]);
+        return $this->hasManyThrough(Recording::class, Viewport::class);
     }
 }

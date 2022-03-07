@@ -41,7 +41,6 @@ class RecordDomChanges implements ShouldQueue
     public function handle()
     {
         $data = json_encode($this->data);
-        Log::info('dom changes: '. $data);
         $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
 
         /** @var $viewport \App\Models\Viewport */

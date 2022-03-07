@@ -20,6 +20,7 @@
         "kirschbaum-development/eloquent-power-joins": "^2.3",
         "laravel/cashier": "^12.5",
         "laravel/framework": "^8.12",
+        "laravel/horizon": "^5.7",
         "laravel/passport": "^10.0",
         "laravel/socialite": "^5.1",
         "laravel/tinker": "^2.5",
