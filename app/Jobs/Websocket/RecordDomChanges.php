@@ -4,6 +4,7 @@ namespace App\Jobs\Websocket;
 
 use App\Enums\RecordingType;
 use App\Models\GuestSession;
+use App\Models\Viewport;
 use App\Rules\TimestampRule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Cache;
@@ -43,7 +44,7 @@ class RecordDomChanges implements ShouldQueue
         $data = json_encode($this->data);
         $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
 
-        /** @var $viewport \App\Models\Viewport */
+        /** @var $viewport Viewport */
         $viewport = $session->viewports()->firstOrCreate([
             'id' => $this->data->viewport,
         ]);

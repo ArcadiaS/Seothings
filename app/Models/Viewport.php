@@ -5,6 +5,7 @@ namespace App\Models;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Viewport extends Model
 {
@@ -29,7 +30,7 @@ class Viewport extends Model
      */
     public $incrementing = false;
 
-    public function guest_session()
+    public function guest_session(): BelongsTo
     {
         return $this->belongsTo(GuestSession::class);
     }

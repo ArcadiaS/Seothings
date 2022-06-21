@@ -27,9 +27,11 @@ class GuestService
     
         $agent = new Agent();
         $agent->setUserAgent($userAgent);
-        
+        /** @var GuestSession $session */
         $session = GuestSession::where('updated_at', '>', Carbon::now()->sub('1', 'hour'))
             ->firstOrNew([
+                'guest_id' => $guest->id
+            ],[
                 'guest_id' => $guest->id,
                 'user_agent' => $userAgent,
                 'device' => $agent->device(),

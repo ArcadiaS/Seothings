@@ -34,8 +34,8 @@ class ClientSocketHandler extends WebSocketHandler
     /**
      * ClientSocketHandler constructor.
      *
-     * @param \BeyondCode\LaravelWebSockets\WebSockets\Channels\ChannelManager $channelManager
-     * @param \App\Services\GuestService                                       $guestService
+     * @param ChannelManager             $channelManager
+     * @param \App\Services\GuestService $guestService
      */
     public function __construct(ChannelManager $channelManager, GuestService $guestService)
     {

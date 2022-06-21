@@ -5,6 +5,9 @@ namespace App\Models;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Kirschbaum\PowerJoins\PowerJoins;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
@@ -14,31 +17,20 @@ class GuestSession extends Model
 
     protected $fillable = [
         'guest_id',
-        'user_agent', chrome firefox
-        'device', -  android ios desktop
-        'device_type', mobile  tablet  web
-        'browser',  - chrome 10.9
-        'platform', - windows linux
+        'user_agent',
+        'device',
+        'device_type',
+        'browser',
+        'platform',
         'platform_version',
-        'desktop', = true false
-        'languages',  EN  TR
-        'is_robot', ->  true false
-        'robot_name', xxxx
-        'first_seen', ->  true false
-        'mobile',  true false
-        'phone', ios android
+        'desktop',
+        'languages',
+        'is_robot',
+        'robot_name',
+        'first_seen',
+        'mobile',
+        'phone',
         'tablet',
-    
-    -> /contact
--> contact   /paris
-
-
-50 sayfa
-
-2.5dk
-
-
-
     ];
 
     /**
@@ -55,17 +47,17 @@ class GuestSession extends Model
      */
     public $incrementing = false;
 
-    public function guest()
+    public function guest(): BelongsTo
     {
         return $this->belongsTo(Guest::class);
     }
 
-    public function viewports()
+    public function viewports(): HasMany
     {
         return $this->hasMany(Viewport::class);
     }
 
-    public function recordings()
+    public function recordings(): HasManyThrough
     {
         return $this->hasManyThrough(Recording::class, Viewport::class);
     }
