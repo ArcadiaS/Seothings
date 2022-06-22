@@ -685,13 +685,6 @@
 <script src="test123/js/main-demo.js"></script>
 <script src="https://maps.google.com/maps/api/js?sensor=false"></script>
 
-<!-- Page Script -->
-<script src="test123/js/particles.min.js"></script>
-<script>
-    particlesJS.load('particles-js', 'js/particles.json', function() {
-        console.log('callback - particles.js config loaded');
-    });
-</script>
 <script src="bundle.js"></script>
 
 <script>
