@@ -43,8 +43,9 @@ class AuthenticateGuest
                 $guest->load('website');
 
                 $host = $request->getHttpHost();
-                $origin = $request->getBaseUrl();
-                Log::emergency($origin);
+                Log::emergency($request->url());
+                Log::emergency($request->getHost());
+                Log::emergency($request->header('origin'));
     
                 $agent = new Agent();
                 $agent->setUserAgent($request->userAgent());
