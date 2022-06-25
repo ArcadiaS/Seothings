@@ -27,7 +27,7 @@ class InitializeController extends Controller
             
             $plan = Plan::where('name', 'free_plan')->first();
     
-            $website->newSubscription($plan->name, $plan->provider_id)->add();
+            $website->newSubscription($plan->name, $plan->provider_name)->add();
             
             $team = $website->team()->create([
                 'name' => $request->company_name,
