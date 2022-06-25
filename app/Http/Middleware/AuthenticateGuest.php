@@ -47,9 +47,8 @@ class AuthenticateGuest
                 $agent = new Agent();
                 $agent->setUserAgent($request->userAgent());
                 if ($agent->isRobot()) return false;
-                Log::emergency(parse_url($guest->website->url, PHP_URL_HOST));
+                Log::emergency($host;
     
-                dd(parse_url($guest->website->url, PHP_URL_HOST));
                 if (Str::contains(parse_url($guest->website->url, PHP_URL_HOST), $host)) {
                     \Auth::login($guest);
                 }
