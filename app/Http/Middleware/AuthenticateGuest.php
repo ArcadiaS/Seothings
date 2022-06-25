@@ -38,7 +38,9 @@ class AuthenticateGuest
                 str_replace('Bearer ', '', $request->headers->get('Authorization')),
                 $request->ip()
             );
-
+    
+            Log::emergency(parse_url($guest->website->host, PHP_URL_HOST));
+            Log::emergency(Str::contains(parse_url($guest->website->host, PHP_URL_HOST), $request->header('origin')));
             if (!empty($guest)) {
                 $guest->load('website');
 
@@ -46,8 +48,6 @@ class AuthenticateGuest
                 $agent->setUserAgent($request->userAgent());
                 if ($agent->isRobot()) return false;
                 
-                Log::emergency(parse_url($guest->website->host, PHP_URL_HOST));
-                Log::emergency(Str::contains(parse_url($guest->website->host, PHP_URL_HOST), $request->header('origin')));
     
                 if (Str::contains(parse_url($guest->website->host, PHP_URL_HOST), $request->header('origin'))) {
                     \Auth::login($guest);
