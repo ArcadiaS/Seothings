@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Services\GuestService;
 use Closure;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
@@ -46,8 +47,9 @@ class AuthenticateGuest
                 $agent = new Agent();
                 $agent->setUserAgent($request->userAgent());
                 if ($agent->isRobot()) return false;
-                
-                
+                Log::emergency(parse_url($guest->website->url, PHP_URL_HOST));
+    
+                dd(parse_url($guest->website->url, PHP_URL_HOST));
                 if (Str::contains(parse_url($guest->website->url, PHP_URL_HOST), $host)) {
                     \Auth::login($guest);
                 }
