@@ -40,7 +40,8 @@ class AuthenticateGuest
             );
     
             Log::emergency($guest->website->host);
-            Log::emergency(Str::contains(parse_url($guest->website->host, PHP_URL_HOST), $request->header('origin')));
+            Log::emergency($request->header('origin'));
+            
             if (!empty($guest)) {
                 $guest->load('website');
 
