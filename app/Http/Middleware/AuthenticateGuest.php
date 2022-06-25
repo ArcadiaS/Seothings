@@ -50,7 +50,7 @@ class AuthenticateGuest
                 if ($agent->isRobot()) return false;
                 
     
-                if (Str::contains($guest->website->host, $request->header('origin'))) {
+                if (Str::contains($request->header('origin'), $guest->website->host)) {
                     \Auth::login($guest);
                 }
             }
