@@ -42,11 +42,6 @@ class AuthenticateGuest
             if (!empty($guest)) {
                 $guest->load('website');
 
-                $host = $request->getHttpHost();
-                Log::emergency($request->url());
-                Log::emergency($request->getHost());
-                Log::emergency($request->header('origin'));
-    
                 $agent = new Agent();
                 $agent->setUserAgent($request->userAgent());
                 if ($agent->isRobot()) return false;
