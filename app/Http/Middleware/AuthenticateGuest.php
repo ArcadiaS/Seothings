@@ -39,7 +39,7 @@ class AuthenticateGuest
                 $request->ip()
             );
     
-            Log::emergency(parse_url($guest->website->host, PHP_URL_HOST));
+            Log::emergency($guest->website->host);
             Log::emergency(Str::contains(parse_url($guest->website->host, PHP_URL_HOST), $request->header('origin')));
             if (!empty($guest)) {
                 $guest->load('website');
@@ -49,7 +49,7 @@ class AuthenticateGuest
                 if ($agent->isRobot()) return false;
                 
     
-                if (Str::contains(parse_url($guest->website->host, PHP_URL_HOST), $request->header('origin'))) {
+                if (Str::contains($guest->website->host, $request->header('origin'))) {
                     \Auth::login($guest);
                 }
             }
