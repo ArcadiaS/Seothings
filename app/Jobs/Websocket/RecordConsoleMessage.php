@@ -48,13 +48,8 @@ class RecordConsoleMessage implements ShouldQueue
             }
         } else {
             $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
-
-            /** @var $viewport \App\Models\Viewport */
-            $viewport = $session->viewports()->firstOrCreate([
-                'id' => $this->data->viewport,
-            ]);
     
-            $viewport->recordings()->create([
+            $session->recordings()->create([
                 'recording_type' => RecordingType::CONSOLE,
                 'session_data' => json_decode($data),
                 'timing' => json_decode($data)->timing
@@ -67,7 +62,7 @@ class RecordConsoleMessage implements ShouldQueue
         return [
             'type' => ['required', 'string', Rule::in(['log', 'warn', 'debug', 'info', 'error'])],
             'stack' => 'nullable',
-            'viewport' => 'required|uuid',
+            'session_id' => 'required|uuid',
             'messages' => 'string',
             'timing' => ['required', new TimestampRule],
         ];

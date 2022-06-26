@@ -46,12 +46,8 @@ class RecordTabVisibilityChange implements ShouldQueue
             }
         } else {
             $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
-
-            /** @var $viewport \App\Models\Viewport */
-            $viewport = $session->viewports()->firstOrCreate([
-                'id' => $this->data->viewport,
-            ]);
-            $viewport->recordings()->create([
+    
+            $session->recordings()->create([
                 'recording_type' => RecordingType::TABVISIBILITY,
                 'session_data' => json_decode($data),
                 'timing' => json_decode($data)->timing
@@ -63,7 +59,7 @@ class RecordTabVisibilityChange implements ShouldQueue
     {
         return [
           'visible' => 'required',
-            'viewport' => 'required|uuid',
+            'session_id' => 'required|uuid',
             'timing' => ['required', new TimestampRule],
         ];
     }

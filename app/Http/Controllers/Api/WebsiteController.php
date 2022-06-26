@@ -28,9 +28,9 @@ class WebsiteController extends Controller
      */
     public function index(Request $request)
     {
-        $websites = $request->user()->teams()->with('website')->get();
+        $websites = $request->user()->websites;
         
-        return TeamResource::collection($websites);
+        return WebsiteResource::collection($websites);
     }
     
     /**
@@ -106,7 +106,6 @@ class WebsiteController extends Controller
     public function destroy(Website $website)
     {
         try {
-            $website->team()->forceDelete();
             $website->guests()->forceDelete();
             $website->settings()->forceDelete();
             $website->surveys()->forceDelete();

@@ -11,10 +11,9 @@ class Roles
         'team_admin' => [
             'name' => 'Admin',
             'permissions' => [
-                'view team dashboard',
-                'manage team subscription',
-                'delete team',
-                'delete user',
+                'view website dashboard',
+                'manage website subscription',
+                'delete website',
                 'change user role',
                 'add users'
             ]
@@ -23,7 +22,7 @@ class Roles
         'team_member' => [
             'name' => 'Member',
             'permissions' => [
-                'view team dashboard'
+                'view website dashboard'
             ]
         ]
 

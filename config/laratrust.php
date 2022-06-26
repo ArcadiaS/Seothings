@@ -95,7 +95,7 @@ return [
         /**
          * Will be used only if the teams functionality is enabled.
          */
-        'team' => \App\Models\Team::class,
+        'team' => \App\Models\Website::class,
     ],
 
     /*
@@ -115,7 +115,7 @@ return [
         /**
          * Will be used only if the teams functionality is enabled.
          */
-        'teams' => 'teams',
+        'teams' => 'websites',
 
         'role_user' => 'role_user',
 
@@ -151,7 +151,7 @@ return [
         /**
          * Role foreign key on Laratrust's role_user and permission_user tables.
          */
-        'team' => 'team_id',
+        'team' => 'website_id',
     ],
 
     /*
@@ -297,9 +297,9 @@ return [
         |--------------------------------------------------------------------------
         |
         | Enable/Disable the permissions assignment to the users.
-        |
+        | info: check this
         */
-        'assign_permissions_to_user' => true,
+        'assign_permissions_to_user' => false,
 
         /*
         |--------------------------------------------------------------------------

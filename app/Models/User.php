@@ -100,9 +100,9 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->attributes['password'] = bcrypt($value);
     }
 
-    public function teams()
+    public function websites()
     {
-        return $this->belongsToMany(Team::class)
+        return $this->belongsToMany(Website::class)
             ->withTimestamps();
     }
 

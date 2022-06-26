@@ -26,9 +26,7 @@ class GuestController extends Controller
     public function index(Website $website, GuestSession $guest_session)
     {
         // todo: filters
-        $sessions = GuestSession::select('guest_sessions.*', 'viewports.id as viewport_id')
-            ->rightJoinRelationship('viewports')
-            ->get();
+        $sessions = $website->guest_sessions();
 
         return SessionResource::collection($sessions);
     }
@@ -36,8 +34,8 @@ class GuestController extends Controller
     public function show(Request $request, Website $website, GuestSession $guestSession)
     {
         ini_set('memory_limit', -1);
-        $session = $guestSession->load('viewports.recordings');
-        $recordings = $guestSession->recordings()->orderBy('session_data->timing')->get();
+        $session = $guestSession->load('recordings');
+        $recordings = $guestSession->recordings()->get();
         $root = $recordings->shift();
     
         $session->root = $root->session_data;
@@ -55,9 +53,6 @@ class GuestController extends Controller
         $session->mouse_movements = $this->testGetData($recordings, 5);
     
     
-        unset($session['viewports']);
-        $session->viewports = $session->viewports()->get()->pluck('id');
-    
         return response()->json($session);
     }
     /**
@@ -70,7 +65,7 @@ class GuestController extends Controller
     public function shows(Website $website, GuestSession $guestSession)
     {
         ini_set('memory_limit', -1);
-        $session = $guestSession->load('viewports.recordings');
+        $session = $guestSession->load('recordings');
         $recordings = $guestSession->recordings()->get();
         $root = $recordings->shift();
     
@@ -88,9 +83,6 @@ class GuestController extends Controller
         $session->tab_visibility = $this->testGetData($recordings, 6);
         $session->mouse_movements = $this->testGetData($recordings, 5);
 
-
-        unset($session['viewports']);
-        $session->viewports = $session->viewports()->get()->pluck('id');
 
         return response()->json($session);
     }

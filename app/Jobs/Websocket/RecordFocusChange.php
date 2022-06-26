@@ -47,13 +47,9 @@ class RecordFocusChange implements ShouldQueue
             }
         } else {
             $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
-
-            /** @var $viewport \App\Models\Viewport */
-            $viewport = $session->viewports()->firstOrCreate([
-                'id' => $this->data->viewport,
-            ]);
     
-            $viewport->recordings()->create([
+    
+            $session->recordings()->create([
                 'recording_type' => RecordingType::FOCUS,
                 'session_data' => json_decode($data),
                 'timing' => json_decode($data)->timing
@@ -65,7 +61,7 @@ class RecordFocusChange implements ShouldQueue
     {
         return [
             'tabHasFocus' => 'required',
-            'viewport' => 'required|uuid',
+            'session_id' => 'required|uuid',
             'timing' => ['required', new TimestampRule],
         ];
     }

@@ -2,18 +2,12 @@
 
 namespace App\Jobs\Websocket;
 
-use App\Enums\RecordingType;
 use App\Models\GuestSession;
-use App\Models\Viewport;
-use App\Rules\TimestampRule;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 
 class RecordDomChanges implements ShouldQueue
 {
@@ -43,13 +37,8 @@ class RecordDomChanges implements ShouldQueue
     {
         $data = json_encode($this->data);
         $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
-
-        /** @var $viewport Viewport */
-        $viewport = $session->viewports()->firstOrCreate([
-            'id' => $this->data->viewport,
-        ]);
     
-        $viewport->recordings()->create([
+        $session->recordings()->create([
             'recording_type' => 1,
             'session_data' => json_decode($data)
         ]);

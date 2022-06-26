@@ -40,7 +40,6 @@ class RecordMouseMovement implements ShouldQueue
     public function handle()
     {
         $data = json_encode($this->data);
-        $viewport_id = $this->data[0]->viewport;
         $validator = Validator::make((array)$this->data, $this->rules());
         if ($validator->fails()) {
             foreach ($validator->getMessageBag()->getMessages() as $message) {
@@ -49,13 +48,8 @@ class RecordMouseMovement implements ShouldQueue
         } else {
             $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
 
-            /** @var $viewport \App\Models\Viewport */
-            $viewport = $session->viewports()->firstOrCreate([
-                'id' => $viewport_id,
-            ]);
-
             foreach (json_decode($data) as $record){
-                $viewport->recordings()->create([
+                $session->recordings()->create([
                     'recording_type' => RecordingType::MOVEMENT,
                     'session_data' => $record,
                     'timing' => $record->timing
@@ -70,7 +64,7 @@ class RecordMouseMovement implements ShouldQueue
             '*.x' => 'required',
             '*.y' => 'required',
             '*.timing' => ['required', new TimestampRule],
-            '*.viewport' => 'required|uuid',
+            '*.session_id' => 'required|uuid',
         ];
     }
 }

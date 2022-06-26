@@ -27,10 +27,15 @@ class Website extends Model
     {
         return WebsiteType::fromValue($this->type)->description;
     }
-
-    public function team()
+    
+    public function users()
     {
-        return $this->hasOne(Team::class);
+        return $this->belongsToMany(User::class);
+    }
+    
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 
     public function guests()

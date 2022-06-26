@@ -46,13 +46,9 @@ class RecordClick implements ShouldQueue
             }
         } else {
             $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
-
-            /** @var $viewport \App\Models\Viewport */
-            $viewport = $session->viewports()->firstOrCreate([
-                'id' => $this->data->viewport,
-            ]);
     
-            $viewport->recordings()->create([
+    
+            $session->recordings()->create([
                 'recording_type' => RecordingType::CLICK,
                 'session_data' => json_decode($data),
             ]);
@@ -65,7 +61,7 @@ class RecordClick implements ShouldQueue
             'timing' => ['required', new TimestampRule],
             'x' => 'required|numeric',
             'y' => 'required|numeric',
-            'viewport' => ['required', 'uuid'],
+            'session_id' => ['required', 'uuid'],
         ];
     }
 }

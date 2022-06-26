@@ -3,17 +3,13 @@
 namespace App\Jobs\Websocket;
 
 use App\Enums\RecordingType;
-use App\Models\Guest;
 use App\Models\GuestSession;
-use App\Models\Viewport;
 use App\Rules\TimestampRule;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 
 class RecordDomInitialize implements ShouldQueue
@@ -50,17 +46,8 @@ class RecordDomInitialize implements ShouldQueue
         $session = GuestSession::findOrFail($this->sessionId)->load('guest.website');
         // todo: check website domain is match ? or direct sql to db for optimize
         // \Log::warning(json_encode($this->get_domaininfo($this->data->baseHref)));
-
-        /** @var $viewport \App\Models\Viewport */
-        if (Viewport::where('guest_session_id', $session->id)->where('id', $this->data->viewport)->exists()){
-            $viewport = Viewport::where('guest_session_id', $session->id)->where('id', $this->data->viewport)->first();
-        }else{
-            $viewport = $session->viewports()->firstOrCreate([
-                'id' => $this->data->viewport,
-            ]);
-        }
     
-        $viewport->recordings()->create([
+        $session->recordings()->create([
             'recording_type' => RecordingType::INITIALIZE,
             'session_data' => json_decode($data),
             'timing' => json_decode($data)->timing,
@@ -85,7 +72,7 @@ class RecordDomInitialize implements ShouldQueue
             'children.*.c' => 'nullable',
             'rootId' => 'required',
             'timing' => ['required', new TimestampRule],
-            'viewport' => 'required|uuid',
+            'session_id' => 'required|uuid',
             'page' => 'required|uuid',
         ];
     }

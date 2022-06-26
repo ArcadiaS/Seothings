@@ -24,6 +24,8 @@ class CreateWebsitesTable extends Migration
             $table->string('host', '50')->nullable();
             $table->enum('type', WebsiteType::getValues())->nullable();
             $table->boolean('verified')->default(false);
+            $table->unsignedBigInteger('company_id')->nullable();
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('set NULL')->onUpdate('cascade');
             $table->timestamps();
         });
     }

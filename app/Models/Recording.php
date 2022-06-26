@@ -15,7 +15,6 @@ class Recording extends Model
     protected $fillable = [
         'recording_type',
         'session_data',
-        'viewport_id',
     ];
 
     protected $casts = [
@@ -23,8 +22,8 @@ class Recording extends Model
         'session_data' => 'json',
     ];
 
-    public function viewport()
+    public function guest_sessions()
     {
-        return $this->belongsTo(Viewport::class);
+        return $this->belongsTo(GuestSession::class);
     }
 }
