@@ -14,7 +14,7 @@ class CreateGuestSessionsTable extends Migration
     public function up()
     {
         Schema::create('guest_sessions', function (Blueprint $table) {
-            $table->bigIncrements('id')->index()->primary();
+            $table->bigIncrements('id')->index();
             $table->mediumText('user_agent');
             $table->string('device')->nullable();
             $table->string('device_type')->nullable();

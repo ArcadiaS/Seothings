@@ -64,6 +64,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'first_login'
     ];
 
     /**
@@ -83,6 +84,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'first_login' => 'boolean'
     ];
 
     /**
@@ -106,9 +108,9 @@ class User extends Authenticatable implements MustVerifyEmail
             ->withTimestamps();
     }
 
-    public function isOnlyAdminInTeam(Team $team)
+    public function isOnlyAdminInWebsite(Website $website)
     {
-        return $this->hasRole('team_admin', $team->id) &&
-            $team->users()->whereRoleIs('team_admin', $team->id)->count() === 1;
+        return $this->hasRole('website_admin', $website->id) &&
+            $website->users()->whereRoleIs('website_admin', $website->id)->count() === 1;
     }
 }

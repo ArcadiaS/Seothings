@@ -43,16 +43,17 @@ class AuthenticateGuest
             Log::emergency($request->header('origin'));
             
             if (!empty($guest)) {
-                $guest->load('website');
-
-                $agent = new Agent();
-                $agent->setUserAgent($request->userAgent());
-                if ($agent->isRobot()) return false;
-                
-    
-                if (Str::contains($request->header('origin'), $guest->website->host)) {
-                    \Auth::login($guest);
-                }
+                //$guest->load('website');
+                //
+                //$agent = new Agent();
+                //$agent->setUserAgent($request->userAgent());
+                //if ($agent->isRobot()) return false;
+                //
+                //
+                //if (Str::contains($request->header('origin'), $guest->website->host)) {
+                //    \Auth::login($guest);
+                //}
+                \Auth::login($guest);
             }
         }
 

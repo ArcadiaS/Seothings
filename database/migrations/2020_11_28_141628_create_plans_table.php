@@ -17,6 +17,7 @@ class CreatePlansTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('provider_id');
+            $table->string('price_id');
             $table->boolean('recording')->default(0);
             $table->boolean('recording_limit')->default(0);
             $table->boolean('survey')->default(0);

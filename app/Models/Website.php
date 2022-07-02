@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Enums\WebsiteType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laratrust\Models\LaratrustTeam;
 use Laravel\Cashier\Billable;
 use Laravel\Cashier\Subscription;
 
-class Website extends Model
+class Website extends LaratrustTeam
 {
     use HasFactory, Billable;
 
@@ -22,15 +23,26 @@ class Website extends Model
     protected $casts = [
         'type' => WebsiteType::class,
     ];
-
+    
     public function getTypeNameAttribute()
     {
         return WebsiteType::fromValue($this->type)->description;
     }
     
+    public function ownedBy(User $user)
+    {
+        return $this->users->find($user)->hasRole('team_admin', $this->id);
+    }
+    
+    public function ownedByCurrentUser()
+    {
+        return $this->ownedBy(auth()->user());
+    }
+    
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)
+            ->withTimestamps();
     }
     
     public function company()
@@ -60,7 +72,7 @@ class Website extends Model
     
     public function plans()
     {
-        return $this->hasManyThrough(Plan::class, Subscription::class, 'team_id', 'provider_id', 'id', 'stripe_plan')
+        return $this->hasManyThrough(Plan::class, Subscription::class, 'website_id', 'provider_id', 'id', 'stripe_plan')
             ->orderBy('subscriptions.created_at', 'desc');
     }
 }

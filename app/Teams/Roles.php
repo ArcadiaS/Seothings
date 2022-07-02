@@ -4,11 +4,11 @@ namespace App\Teams;
 
 class Roles
 {
-    public static $roleWhenCreatingTeam = 'team_admin';
-    public static $roleWhenJoiningTeam = 'team_member';
+    public static $roleWhenCreatingTeam = 'website_admin';
+    public static $roleWhenJoiningTeam = 'website_member';
 
     public static $roles = [
-        'team_admin' => [
+        'website_admin' => [
             'name' => 'Admin',
             'permissions' => [
                 'view website dashboard',
@@ -19,7 +19,7 @@ class Roles
             ]
         ],
 
-        'team_member' => [
+        'website_member' => [
             'name' => 'Member',
             'permissions' => [
                 'view website dashboard'

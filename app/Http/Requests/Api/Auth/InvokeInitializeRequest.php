@@ -15,7 +15,7 @@ class InvokeInitializeRequest extends FormRequest
      */
     public function authorize()
     {
-        return \Auth::guard('api')->check() && !request()->user()->first_login;
+        return \Auth::guard('api')->check() && !request()->user('api')->first_login;
     }
 
     /**

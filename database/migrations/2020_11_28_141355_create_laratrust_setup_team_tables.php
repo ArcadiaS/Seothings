@@ -20,16 +20,16 @@ class CreateLaratrustSetupTeamTables extends Migration
             $table->dropPrimary(['user_id', 'role_id', 'user_type']);
 
             // Add team_id column
-            $table->unsignedBigInteger('team_id')->nullable();
+            $table->unsignedBigInteger('website_id')->nullable();
 
             // Create foreign keys
             $table->foreign('role_id')->references('id')->on('roles')
                 ->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('team_id')->references('id')->on('teams')
+            $table->foreign('website_id')->references('id')->on('websites')
                 ->onUpdate('cascade')->onDelete('cascade');
 
             // Create a unique key
-            $table->unique(['user_id', 'role_id', 'user_type', 'team_id']);
+            $table->unique(['user_id', 'role_id', 'user_type', 'website_id'], 'user_id_permission_id_user_type_website_id_unique');
         });
 
         Schema::table('permission_user', function (Blueprint $table) {
@@ -41,12 +41,12 @@ class CreateLaratrustSetupTeamTables extends Migration
                 ->onUpdate('cascade')->onDelete('cascade');
 
             // Add team_id column
-            $table->unsignedBigInteger('team_id')->nullable();
+            $table->unsignedBigInteger('website_id')->nullable();
 
-            $table->foreign('team_id')->references('id')->on('teams')
+            $table->foreign('website_id')->references('id')->on('websites')
                 ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->unique(['user_id', 'permission_id', 'user_type', 'team_id']);
+            $table->unique(['user_id', 'permission_id', 'user_type', 'website_id'], 'user_id_permission_id_user_type_website_id_unique');
         });
     }
 

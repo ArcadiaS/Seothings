@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWebsiteUserTable extends Migration
+class CreateUserWebsiteTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateWebsiteUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('website_user', function (Blueprint $table) {
+        Schema::create('user_website', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('website_id')->index();
             $table->unsignedBigInteger('user_id')->index();
@@ -31,6 +31,6 @@ class CreateWebsiteUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('website_user');
+        Schema::dropIfExists('user_website');
     }
 }

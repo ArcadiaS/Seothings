@@ -685,7 +685,7 @@
 <script src="test123/js/main-demo.js"></script>
 <script src="https://maps.google.com/maps/api/js?sensor=false"></script>
 
-<script src="bundle.js"></script>
+<script src="test123/js/bundle.js"></script>
 
 <script>
     $(window).on('load', function() {
