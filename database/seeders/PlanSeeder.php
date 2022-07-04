@@ -17,7 +17,7 @@ class PlanSeeder extends Seeder
         $plans[] = [
             'name' => 'free_plan',
             'provider_id' => 'prod_IYBlsKVS4tzJqB',
-            'price_id' => 'prod_IYBlsKVS4tzJqB',
+            'price_id' => 'price_1Hx5NfGR6SkSUojFSY69UhfC',
             'recording' => 1,
             'recording_limit' => 1,
             'survey' => 1,
@@ -34,7 +34,7 @@ class PlanSeeder extends Seeder
         $plans[] = [
             'name' => 'small_1',
             'provider_id' => 'prod_JkO0WCLCcoJzTa',
-            'price_id' => 'prod_IYBlsKVS4tzJqB',
+            'price_id' => 'price_1J6tE3GR6SkSUojFljP329vk',
             'recording' => 1,
             'recording_limit' => 1,
             'survey' => 1,
@@ -51,7 +51,7 @@ class PlanSeeder extends Seeder
         $plans[] = [
             'name' => 'medium_1',
             'provider_id' => 'prod_JkO02UTihx089k',
-            'price_id' => 'prod_IYBlsKVS4tzJqB',
+            'price_id' => 'price_1J6tExGR6SkSUojF3RpS2VyI',
             'recording' => 1,
             'recording_limit' => 1,
             'survey' => 1,
@@ -68,7 +68,7 @@ class PlanSeeder extends Seeder
         $plans[] = [
             'name' => 'large_1',
             'provider_id' => 'prod_JkO1XZmX46KDGg',
-            'price_id' => 'prod_IYBlsKVS4tzJqB',
+            'price_id' => 'price_1J6tFmGR6SkSUojFHRuHc5or',
             'recording' => 1,
             'recording_limit' => 1,
             'survey' => 1,

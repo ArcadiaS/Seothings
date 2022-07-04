@@ -690,7 +690,7 @@
 <script>
     $(window).on('load', function() {
         replayjs('auth', {
-            site_id: 100000
+            site_id: 100001
         })
     })
 </script>

@@ -55,6 +55,11 @@ class Website extends LaratrustTeam
         return $this->hasMany(Guest::class);
     }
     
+    public function guest_sessions()
+    {
+        return $this->hasManyThrough(GuestSession::class, Guest::class);
+    }
+    
     public function settings()
     {
         return $this->hasOne(WebsiteSetting::class);
@@ -72,7 +77,7 @@ class Website extends LaratrustTeam
     
     public function plans()
     {
-        return $this->hasManyThrough(Plan::class, Subscription::class, 'website_id', 'provider_id', 'id', 'stripe_plan')
+        return $this->hasManyThrough(Plan::class, Subscription::class, 'website_id', 'provider_id', 'id', 'stripe_price')
             ->orderBy('subscriptions.created_at', 'desc');
     }
 }

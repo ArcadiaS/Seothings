@@ -38,11 +38,9 @@ class AuthenticateGuest
                 str_replace('Bearer ', '', $request->headers->get('Authorization')),
                 $request->ip()
             );
-    
-            Log::emergency($guest->website->host);
-            Log::emergency($request->header('origin'));
             
             if (!empty($guest)) {
+                \Auth::login($guest);
                 //$guest->load('website');
                 //
                 //$agent = new Agent();
@@ -53,7 +51,6 @@ class AuthenticateGuest
                 //if (Str::contains($request->header('origin'), $guest->website->host)) {
                 //    \Auth::login($guest);
                 //}
-                \Auth::login($guest);
             }
         }
 

@@ -23,10 +23,12 @@ class GuestController extends Controller
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(Website $website, GuestSession $guest_session)
+    public function index(Website $website)
     {
         // todo: filters
-        $sessions = $website->guest_sessions();
+        $sessions = GuestSession::whereHas('guest', function($query)use($website){
+            return $query->where('website_id', $website->id);
+        })->get();
 
         return SessionResource::collection($sessions);
     }
